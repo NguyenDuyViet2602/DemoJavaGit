@@ -15,13 +15,12 @@ import java.util.List;
  * @author Manh
  */
 public class CustomerDAO {
+
     public List<Customer> getCustomerById() throws SQLException {
         String sql = "SELECT * FROM Customer";
         List<Customer> list = new ArrayList<>();
         try (
-            Connection conn = DatabaseConnection.getConnection(); 
-            PreparedStatement pstmt = conn.prepareStatement(sql); 
-            ResultSet rs = pstmt.executeQuery()) {
+                Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql); ResultSet rs = pstmt.executeQuery()) {
 
             while (rs.next()) {
                 Customer customer = new Customer();
@@ -39,28 +38,13 @@ public class CustomerDAO {
         }
         return list;
     }
-    public void addCustomer(Customer customer) throws SQLException {
-        String sql = "INSERT INTO Customer (CustomerName, Email, Phone, Address, TaxCode) VALUES (?, ?, ?, ?, ?)";
-
-        try (Connection conn = DatabaseConnection.getConnection(); 
-            PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, customer.getName());
-            stmt.setString(2, customer.getEmail());
-            stmt.setString(3, customer.getPhone());
-            stmt.setString(4, customer.getAddress());
-            stmt.setString(5, customer.getTaxCode());
-            stmt.executeUpdate();
-        }
-    }
 
     public Customer getCustomerById(int customerId) throws SQLException {
         String sql = "SELECT * FROM Customer WHERE CustomerID = ?";
         Customer customer = null;
 
         try (
-            Connection conn = DatabaseConnection.getConnection(); 
-            PreparedStatement stmt = conn.prepareStatement(sql)) {
+                Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, customerId);
             ResultSet rs = stmt.executeQuery();
@@ -77,4 +61,19 @@ public class CustomerDAO {
         }
         return customer;
     }
+
+    public void addCustomer(Customer customer) throws SQLException {
+        String sql = "INSERT INTO Customer (CustomerName, Email, Phone, Address, TaxCode) VALUES (?, ?, ?, ?, ?)";
+
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, customer.getName());
+            stmt.setString(2, customer.getEmail());
+            stmt.setString(3, customer.getPhone());
+            stmt.setString(4, customer.getAddress());
+            stmt.setString(5, customer.getTaxCode());
+            stmt.executeUpdate();
+        }
+    }
+
 }

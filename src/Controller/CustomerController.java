@@ -30,7 +30,7 @@ public class CustomerController {
         // Lắng nghe sự kiện nút "Thêm khách hàng"
         this.view.getBtnAddCustomer().addActionListener(e -> addCustomer());
     }
-
+    
     private void addCustomer() {
         // Lấy thông tin khách hàng từ View
         String name = view.getName();

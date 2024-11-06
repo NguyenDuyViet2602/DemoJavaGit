@@ -16,19 +16,22 @@ import Model.Customer;
  * @author Manh
  */
 public class frmCustomer extends javax.swing.JPanel {
+
     private final CustomerDAO cus = new CustomerDAO();
     private final DefaultTableModel tableModel = new DefaultTableModel();
+
     /**
      * Creates new form Customer
      */
     public frmCustomer() throws SQLException {
         initComponents();
-        String[] colsName = {"Id", "Name","Email","Phone","Adesss","TaxCode"}; // Đặt tiêu đề cột cho tableModel
+        String[] colsName = {"Id", "Name", "Email", "Phone", "Adesss", "TaxCode"}; // Đặt tiêu đề cột cho tableModel
         tableModel.setColumnIdentifiers(colsName);
         tblCustomer.setModel(tableModel); // Kết nối jtable với tableModel
         ShowData();
-        
+
     }
+
     public void ShowData() throws SQLException {
         List<Customer> lst = cus.getCustomerById(); // Lấy danh sách loại sản phẩm từ cơ sở dữ liệu
         try {
@@ -43,7 +46,7 @@ public class frmCustomer extends javax.swing.JPanel {
             e.printStackTrace();
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -65,9 +68,11 @@ public class frmCustomer extends javax.swing.JPanel {
         txtPhone = new javax.swing.JTextField();
         txtAddress = new javax.swing.JTextField();
         txtTaxCode = new javax.swing.JTextField();
-        btnEdit = new javax.swing.JButton();
+        btnEditCustomer = new javax.swing.JButton();
         btnAddCustomer = new javax.swing.JButton();
-        btnDelete = new javax.swing.JButton();
+        btnDeleteCustomer = new javax.swing.JButton();
+        btnSaveCustomer = new javax.swing.JButton();
+        btnResetCustomer = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblCustomer = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
@@ -90,19 +95,26 @@ public class frmCustomer extends javax.swing.JPanel {
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel5.setText("TaxCode:");
 
-        btnEdit.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnEdit.setText("Edit");
+        btnEditCustomer.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnEditCustomer.setText("Edit");
 
         btnAddCustomer.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnAddCustomer.setText("Save");
+        btnAddCustomer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/8666718_plus_circle_icon.png"))); // NOI18N
+        btnAddCustomer.setText("Add");
         btnAddCustomer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddCustomerActionPerformed(evt);
             }
         });
 
-        btnDelete.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnDelete.setText("Delete");
+        btnDeleteCustomer.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnDeleteCustomer.setText("Delete");
+
+        btnSaveCustomer.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnSaveCustomer.setText("Save");
+
+        btnResetCustomer.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnResetCustomer.setText("Reset");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -111,6 +123,15 @@ public class frmCustomer extends javax.swing.JPanel {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(btnAddCustomer)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                        .addComponent(btnEditCustomer)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnSaveCustomer)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnDeleteCustomer)
+                        .addGap(12, 12, 12))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
@@ -133,14 +154,12 @@ public class frmCustomer extends javax.swing.JPanel {
                             .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(btnAddCustomer)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnEdit)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnDelete)))
-                .addContainerGap(107, Short.MAX_VALUE))
+                            .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap())))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(145, 145, 145)
+                .addComponent(btnResetCustomer)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -167,10 +186,13 @@ public class frmCustomer extends javax.swing.JPanel {
                     .addComponent(jLabel5))
                 .addGap(43, 43, 43)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnEdit)
-                    .addComponent(btnDelete)
-                    .addComponent(btnAddCustomer))
-                .addContainerGap(37, Short.MAX_VALUE))
+                    .addComponent(btnEditCustomer)
+                    .addComponent(btnAddCustomer)
+                    .addComponent(btnSaveCustomer)
+                    .addComponent(btnDeleteCustomer))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnResetCustomer)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         tblCustomer.setModel(new javax.swing.table.DefaultTableModel(
@@ -213,7 +235,7 @@ public class frmCustomer extends javax.swing.JPanel {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(32, 32, 32)
                 .addComponent(jLabel6)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -225,7 +247,7 @@ public class frmCustomer extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(27, 27, 27)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -238,8 +260,7 @@ public class frmCustomer extends javax.swing.JPanel {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 444, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -255,15 +276,49 @@ public class frmCustomer extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddCustomerActionPerformed
-        
+
     }//GEN-LAST:event_btnAddCustomerActionPerformed
-public String getName() {
-    if (txtName != null) {
-        return txtName.getText();
+    public void ClearData() throws SQLException {
+//Lay chi so dong cuoi cung
+        int n = tableModel.getRowCount() - 1;
+        for (int i = n; i >= 0; i--) {
+            tableModel.removeRow(i);//Remove tung dong
+        }
     }
-    return "";
-}
-public String getEmail() {
+
+    private void setNull() {
+        this.txtName.setText(null);
+        this.txtEmail.setText(null);
+        this.txtPhone.setText(null);
+        this.txtAddress.setText(null);
+        this.txtTaxCode.setText(null);
+        this.txtName.requestFocus();
+    }
+
+    private void setKhoa(boolean a) {
+        this.txtName.setEnabled(!a);
+        this.txtEmail.setEnabled(!a);
+        this.txtPhone.setEnabled(!a);
+        this.txtAddress.setEnabled(!a);
+        this.txtTaxCode.setEnabled(!a);
+    }
+
+    private void setButton(boolean a) {
+        this.btnAddCustomer.setEnabled(a);
+        this.btnDeleteCustomer.setEnabled(a);
+        this.btnEditCustomer.setEnabled(a);
+        this.btnSaveCustomer.setEnabled(!a);
+        this.btnResetCustomer.setEnabled(!a);
+    }
+
+    public String getName() {
+        if (txtName != null) {
+            return txtName.getText();
+        }
+        return "";
+    }
+
+    public String getEmail() {
         return txtEmail.getText();
     }
 
@@ -285,8 +340,10 @@ public String getEmail() {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddCustomer;
-    private javax.swing.JButton btnDelete;
-    private javax.swing.JButton btnEdit;
+    private javax.swing.JButton btnDeleteCustomer;
+    private javax.swing.JButton btnEditCustomer;
+    private javax.swing.JButton btnResetCustomer;
+    private javax.swing.JButton btnSaveCustomer;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
