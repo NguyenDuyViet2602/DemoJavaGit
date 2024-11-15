@@ -9,7 +9,7 @@ package Model;
  * @author Manh
  */
 public class Customer {
-    private int id;          // ID của khách hàng
+    private int CusId;          // ID của khách hàng
     private String name;      // Tên khách hàng
     private String email;     // Email của khách hàng
     private String phone;     // Số điện thoại
@@ -19,7 +19,8 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(String name, String email, String phone, String address, String taxCode) {
+    public Customer(int CusId, String name, String email, String phone, String address, String taxCode) {
+        this.CusId = CusId;
         this.name = name;
         this.email = email;
         this.phone = phone;
@@ -28,11 +29,11 @@ public class Customer {
     }
 
     public int getId() {
-        return id;
+        return CusId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setId(int CusId) {
+        this.CusId = CusId;
     }
 
     public String getName() {

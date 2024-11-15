@@ -7,6 +7,8 @@ package View;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import View.Invoice.frmInvoice;
+import View.InvoiceDetail.frmInvoiceDetail;
 
 /**
  *
@@ -35,14 +37,13 @@ public class Home extends javax.swing.JFrame {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
-        jToggleButton1 = new javax.swing.JToggleButton();
-        jToggleButton2 = new javax.swing.JToggleButton();
-        jToggleButton3 = new javax.swing.JToggleButton();
-        jToggleButton4 = new javax.swing.JToggleButton();
-        jToggleButton5 = new javax.swing.JToggleButton();
-        jToggleButton6 = new javax.swing.JToggleButton();
-        jToggleButton7 = new javax.swing.JToggleButton();
-        jToggleButton8 = new javax.swing.JToggleButton();
+        btnCustomers = new javax.swing.JToggleButton();
+        btnEmployee = new javax.swing.JToggleButton();
+        Product = new javax.swing.JToggleButton();
+        btnInvoiceDetail = new javax.swing.JToggleButton();
+        btnUsers = new javax.swing.JToggleButton();
+        btnReport = new javax.swing.JToggleButton();
+        btnInvoice = new javax.swing.JToggleButton();
         panel_load = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
 
@@ -50,47 +51,58 @@ public class Home extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        buttonGroup1.add(jToggleButton1);
-        jToggleButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jToggleButton1.setText("Customers");
-        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroup1.add(btnCustomers);
+        btnCustomers.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnCustomers.setText("Customers");
+        btnCustomers.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jToggleButton1ActionPerformed(evt);
+                btnCustomersActionPerformed(evt);
             }
         });
 
-        buttonGroup1.add(jToggleButton2);
-        jToggleButton2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jToggleButton2.setText("Supplier");
-
-        buttonGroup1.add(jToggleButton3);
-        jToggleButton3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jToggleButton3.setText("Employee");
-        jToggleButton3.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroup1.add(btnEmployee);
+        btnEmployee.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnEmployee.setText("Employee");
+        btnEmployee.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jToggleButton3ActionPerformed(evt);
+                btnEmployeeActionPerformed(evt);
             }
         });
 
-        buttonGroup1.add(jToggleButton4);
-        jToggleButton4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jToggleButton4.setText("Product");
+        buttonGroup1.add(Product);
+        Product.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Product.setText("Product");
+        Product.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ProductActionPerformed(evt);
+            }
+        });
 
-        buttonGroup1.add(jToggleButton5);
-        jToggleButton5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jToggleButton5.setText("Invoice Detail");
+        buttonGroup1.add(btnInvoiceDetail);
+        btnInvoiceDetail.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnInvoiceDetail.setText("Invoice Detail");
+        btnInvoiceDetail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInvoiceDetailActionPerformed(evt);
+            }
+        });
 
-        buttonGroup1.add(jToggleButton6);
-        jToggleButton6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jToggleButton6.setText("Users");
+        buttonGroup1.add(btnUsers);
+        btnUsers.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnUsers.setText("Users");
 
-        buttonGroup1.add(jToggleButton7);
-        jToggleButton7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jToggleButton7.setText("Report");
+        buttonGroup1.add(btnReport);
+        btnReport.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnReport.setText("Report");
 
-        buttonGroup1.add(jToggleButton8);
-        jToggleButton8.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jToggleButton8.setText("Invoice");
+        buttonGroup1.add(btnInvoice);
+        btnInvoice.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnInvoice.setText("Invoice");
+        btnInvoice.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInvoiceActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -99,35 +111,32 @@ public class Home extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jToggleButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jToggleButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jToggleButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jToggleButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jToggleButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jToggleButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jToggleButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnCustomers, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnEmployee, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Product, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnInvoiceDetail, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnUsers, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnReport, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnInvoice, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(28, 28, 28)
-                .addComponent(jToggleButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jToggleButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jToggleButton3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jToggleButton4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jToggleButton8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jToggleButton5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jToggleButton7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jToggleButton6)
+                .addComponent(btnCustomers)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnEmployee)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(Product)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnInvoice)
+                .addGap(9, 9, 9)
+                .addComponent(btnInvoiceDetail)
+                .addGap(12, 12, 12)
+                .addComponent(btnReport)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnUsers)
                 .addContainerGap(142, Short.MAX_VALUE))
         );
 
@@ -150,7 +159,7 @@ public class Home extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 1015, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -163,13 +172,13 @@ public class Home extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(12, 12, 12)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(panel_load, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -185,7 +194,7 @@ public class Home extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+    private void btnCustomersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCustomersActionPerformed
         try {
             frmCustomer cus = new frmCustomer();
             System.out.println("Loading frmCustomer...");
@@ -194,12 +203,38 @@ public class Home extends javax.swing.JFrame {
             Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-    }//GEN-LAST:event_jToggleButton1ActionPerformed
+    }//GEN-LAST:event_btnCustomersActionPerformed
 
-    private void jToggleButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton3ActionPerformed
-        Employee epy = new Employee();
-        jpload.jPanelLoader(panel_load, epy);
-    }//GEN-LAST:event_jToggleButton3ActionPerformed
+    private void btnEmployeeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEmployeeActionPerformed
+        
+    }//GEN-LAST:event_btnEmployeeActionPerformed
+
+    private void ProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ProductActionPerformed
+        try {
+            frmProduct prd = new frmProduct();
+            jpload.jPanelLoader(panel_load, prd);
+        } catch (SQLException ex) {
+            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_ProductActionPerformed
+
+    private void btnInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInvoiceActionPerformed
+        try {
+            frmInvoice iv = new frmInvoice();
+            jpload.jPanelLoader(panel_load, iv);
+        } catch (SQLException ex) {
+            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnInvoiceActionPerformed
+
+    private void btnInvoiceDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInvoiceDetailActionPerformed
+        try {
+            frmInvoiceDetail ivdt = new frmInvoiceDetail();
+            jpload.jPanelLoader(panel_load, ivdt);
+        } catch (SQLException ex) {
+            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnInvoiceDetailActionPerformed
 
     /**
      * @param args the command line arguments
@@ -237,17 +272,16 @@ public class Home extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JToggleButton Product;
+    private javax.swing.JToggleButton btnCustomers;
+    private javax.swing.JToggleButton btnEmployee;
+    private javax.swing.JToggleButton btnInvoice;
+    private javax.swing.JToggleButton btnInvoiceDetail;
+    private javax.swing.JToggleButton btnReport;
+    private javax.swing.JToggleButton btnUsers;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JToggleButton jToggleButton1;
-    private javax.swing.JToggleButton jToggleButton2;
-    private javax.swing.JToggleButton jToggleButton3;
-    private javax.swing.JToggleButton jToggleButton4;
-    private javax.swing.JToggleButton jToggleButton5;
-    private javax.swing.JToggleButton jToggleButton6;
-    private javax.swing.JToggleButton jToggleButton7;
-    private javax.swing.JToggleButton jToggleButton8;
     private javax.swing.JPanel panel_load;
     // End of variables declaration//GEN-END:variables
 }

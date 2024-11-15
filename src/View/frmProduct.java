@@ -5,30 +5,31 @@
 package View;
 
 import javax.swing.table.DefaultTableModel;
-import Controller.CustomerController;
+import Controller.ProductController;
 import java.sql.SQLException;
 import java.util.List;
-import Model.Customer;
+import Model.Product;
+import java.math.BigDecimal;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author Manh
  */
-public class frmCustomer extends javax.swing.JPanel {
+public class frmProduct extends javax.swing.JPanel {
 
     private boolean cothem = true;
-    private final CustomerController cus = new CustomerController();
+    private final ProductController pd = new ProductController();
     private final DefaultTableModel tableModel = new DefaultTableModel();
 
     /**
      * Creates new form Customer
      */
-    public frmCustomer() throws SQLException {
+    public frmProduct() throws SQLException {
         initComponents();
-        String[] colsName = {"Id", "Name", "Email", "Phone", "Adesss", "TaxCode"}; // Đặt tiêu đề cột cho tableModel
+        String[] colsName = {"Id", "Name Product", "Price", "Description"}; // Đặt tiêu đề cột cho tableModel
         tableModel.setColumnIdentifiers(colsName);
-        tblCustomer.setModel(tableModel); // Kết nối jtable với tableModel
+        tblProduct.setModel(tableModel); // Kết nối jtable với tableModel
         ShowData();
         setNull(); // Gọi hàm xóa trắng các JTextField
         setKhoa(true); // Gọi hàm khóa các TextField
@@ -37,12 +38,12 @@ public class frmCustomer extends javax.swing.JPanel {
     }
 
     public void ShowData() throws SQLException {
-        List<Customer> lst = cus.getCustomerById(); // Lấy danh sách loại sản phẩm từ cơ sở dữ liệu
+        List<Product> lst = pd.getProductById(); // Lấy danh sách loại sản phẩm từ cơ sở dữ liệu
         try {
             // Xóa dữ liệu cũ trước khi thêm mới
             tableModel.setRowCount(0);
-            for (Customer item : lst) { // Duyệt qua từng dòng của lst
-                Object[] rows = {item.getId(), item.getName(), item.getEmail(), item.getPhone(), item.getAddress(), item.getTaxCode()};
+            for (Product item : lst) { // Duyệt qua từng dòng của lst
+                Object[] rows = {item.getPdId(), item.getPdName(), item.getPdPrice(), item.getPdDescription()};
                 // Giả sử các phương thức getId, getTenLoai, getMoTa đã được định nghĩa trong lớp LoaiSP
                 tableModel.addRow(rows); // Đưa dòng dữ liệu vào tableModel
             }
@@ -65,20 +66,17 @@ public class frmCustomer extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        txtName = new javax.swing.JTextField();
-        txtEmail = new javax.swing.JTextField();
-        txtPhone = new javax.swing.JTextField();
-        txtAddress = new javax.swing.JTextField();
-        txtTaxCode = new javax.swing.JTextField();
+        txtNameProduct = new javax.swing.JTextField();
+        txtPriceProduct = new javax.swing.JTextField();
         btnEditCustomer = new javax.swing.JButton();
         btnAddCustomer = new javax.swing.JButton();
         btnDeleteCustomer = new javax.swing.JButton();
         btnSaveCustomer = new javax.swing.JButton();
         btnResetCustomer = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtADescriptionProduct = new javax.swing.JTextArea();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblCustomer = new javax.swing.JTable();
+        tblProduct = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -87,19 +85,13 @@ public class frmCustomer extends javax.swing.JPanel {
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel1.setText("Email:");
+        jLabel1.setText("Price:");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel2.setText("Name:");
+        jLabel2.setText("Name Product:");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel3.setText("Phone:");
-
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel4.setText("Adress:");
-
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel5.setText("TaxCode:");
+        jLabel3.setText("Description:");
 
         btnEditCustomer.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnEditCustomer.setText("Edit");
@@ -142,6 +134,10 @@ public class frmCustomer extends javax.swing.JPanel {
             }
         });
 
+        txtADescriptionProduct.setColumns(20);
+        txtADescriptionProduct.setRows(5);
+        jScrollPane2.setViewportView(txtADescriptionProduct);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -151,7 +147,7 @@ public class frmCustomer extends javax.swing.JPanel {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(btnAddCustomer)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnEditCustomer)
                         .addGap(18, 18, 18)
                         .addComponent(btnSaveCustomer)
@@ -160,28 +156,15 @@ public class frmCustomer extends javax.swing.JPanel {
                         .addGap(12, 12, 12))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addGap(9, 9, 9)
-                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jLabel2)
-                                            .addComponent(jLabel1)))
-                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(jPanel2Layout.createSequentialGroup()
-                                            .addGap(3, 3, 3)
-                                            .addComponent(jLabel3))
-                                        .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING))))
-                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtTaxCode, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap())))
+                            .addComponent(txtPriceProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtNameProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(19, 19, 19))))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(145, 145, 145)
                 .addComponent(btnResetCustomer)
@@ -193,24 +176,16 @@ public class frmCustomer extends javax.swing.JPanel {
                 .addGap(19, 19, 19)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNameProduct, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtPriceProduct, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
                 .addGap(14, 14, 14)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
-                .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtTaxCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
-                .addGap(43, 43, 43)
+                    .addComponent(jLabel3)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEditCustomer)
                     .addComponent(btnAddCustomer)
@@ -221,45 +196,40 @@ public class frmCustomer extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        tblCustomer.setModel(new javax.swing.table.DefaultTableModel(
+        tblProduct.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Id", "Name", "Phone", "Adress", "TaxCode"
+                "Id", "Name Pruct", "Price", "Description"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
-        tblCustomer.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblProduct.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblCustomerMouseClicked(evt);
+                tblProductMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tblCustomer);
+        jScrollPane1.setViewportView(tblProduct);
 
         jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel6.setText("Customer");
+        jLabel6.setText("Product");
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel7.setText("Search:");
 
-        txtSearch.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtSearchActionPerformed(evt);
-            }
-        });
         txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtSearchKeyReleased(evt);
@@ -337,14 +307,11 @@ public class frmCustomer extends javax.swing.JPanel {
     }//GEN-LAST:event_btnAddCustomerActionPerformed
 
     private void btnSaveCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveCustomerActionPerformed
-        String name = txtName.getText();
-        String email = txtEmail.getText();
-        String phone = txtPhone.getText();
-        String address = txtAddress.getText();
-        String taxcode = txtTaxCode.getText();
-
+        String namepd = txtNameProduct.getText();
+        BigDecimal pricepd = new BigDecimal(txtPriceProduct.getText());
+        String descriptionpd = txtADescriptionProduct.getText();
         // Kiểm tra thông tin nhập vào
-        if (name.length() == 0 || email.length() == 0 || phone.length() == 0 || address.length() == 0 || taxcode.length() == 0) {
+        if (namepd.length() == 0 || descriptionpd.length() == 0) {
             JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin", "Thông báo", JOptionPane.WARNING_MESSAGE);
             return;
         }
@@ -352,23 +319,21 @@ public class frmCustomer extends javax.swing.JPanel {
         // Kiểm tra độ dài
         try {
             // Tạo đối tượng Customer
-            Customer obj = new Customer();
-            obj.setName(name);
-            obj.setEmail(email);
-            obj.setPhone(phone);
-            obj.setAddress(address);
-            obj.setTaxCode(taxcode);
+            Product obj = new Product();
+            obj.setPdName(namepd);
+            obj.setPdPrice(pricepd);
+            obj.setPdDescription(descriptionpd);
             if (!cothem) { // Nếu không phải thêm mới
-                int row = this.tblCustomer.getSelectedRow(); // Lấy hàng đã chọn
-                int id = Integer.parseInt(this.tblCustomer.getModel().getValueAt(row, 0).toString()); // Lấy ID từ bảng
-                obj.setId(id); // Thiết lập ID cho đối tượng
+                int row = this.tblProduct.getSelectedRow(); // Lấy hàng đã chọn
+                int id = Integer.parseInt(this.tblProduct.getModel().getValueAt(row, 0).toString()); // Lấy ID từ bảng
+                obj.setPdId(id); // Thiết lập ID cho đối tượng
             }
             // Thực hiện thêm hoặc sửa dữ liệu
             if (cothem) { // Thêm mới
-                cus.addCustomer(obj);
+                pd.addProduct(obj);
                 JOptionPane.showMessageDialog(null, "Thêm loại sản phẩm thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
             } else { // Sửa
-                cus.EditCustomer(obj);
+                pd.EditProduct(obj);
                 JOptionPane.showMessageDialog(null, "Sửa loại sản phẩm thành công", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
             }
 
@@ -384,18 +349,16 @@ public class frmCustomer extends javax.swing.JPanel {
         setButton(true);
     }//GEN-LAST:event_btnSaveCustomerActionPerformed
 
-    private void tblCustomerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCustomerMouseClicked
+    private void tblProductMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblProductMouseClicked
         try {
-            int row = this.tblCustomer.getSelectedRow();
-            int id = Integer.parseInt(this.tblCustomer.getModel().getValueAt(row, 0).toString());
-            Customer obj = cus.getCustomerById(id);
+            int row = this.tblProduct.getSelectedRow();
+            int id = Integer.parseInt(this.tblProduct.getModel().getValueAt(row, 0).toString());
+            Product obj = pd.getProductById(id);
 
             if (obj != null) {
-                txtName.setText(obj.getName());
-                txtEmail.setText(obj.getEmail());
-                txtPhone.setText(obj.getPhone());
-                txtAddress.setText(obj.getAddress());
-                txtTaxCode.setText(obj.getTaxCode());
+                txtNameProduct.setText(obj.getPdName());
+                txtPriceProduct.setText(obj.getPdPrice().toString());
+                txtADescriptionProduct.setText(obj.getPdDescription());
                 setKhoa(false); // Mở khóa các TextField
                 setButton(true); // Khóa các nút Thêm, Sửa, Xóa
                 btnSaveCustomer.setEnabled(false);
@@ -404,10 +367,10 @@ public class frmCustomer extends javax.swing.JPanel {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }//GEN-LAST:event_tblCustomerMouseClicked
+    }//GEN-LAST:event_tblProductMouseClicked
 
     private void btnEditCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditCustomerActionPerformed
-        String name = txtName.getText();
+        String name = txtNameProduct.getText();
         if (name.length() == 0) //Chua chon Ma loai
             JOptionPane.showMessageDialog(null, "Vui long chon loi can sua",
                     "Thong bao", 1);
@@ -419,14 +382,14 @@ public class frmCustomer extends javax.swing.JPanel {
     }//GEN-LAST:event_btnEditCustomerActionPerformed
 
     private void btnDeleteCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteCustomerActionPerformed
-        int row = this.tblCustomer.getSelectedRow();
-        int id = Integer.parseInt(this.tblCustomer.getModel().getValueAt(row, 0).toString());
+        int row = this.tblProduct.getSelectedRow();
+        int id = Integer.parseInt(this.tblProduct.getModel().getValueAt(row, 0).toString());
         try {
             if (id == 0) {
                 JOptionPane.showMessageDialog(null, "Chon 1 loai SP de xoa", "Thong bao", 1);
             } else {
                 if (JOptionPane.showConfirmDialog(null, "Ban muon xoa loai " + id + "nay hay khong ? ", "Thong bao", 2) == 0) {
-                    cus.DeleteData(id);//goi ham xoa du lieu theo ma loai
+                    pd.DeleteData(id);//goi ham xoa du lieu theo ma loai
                     ClearData();//Xoa du lieu trong tableModel
                     ShowData();//Do du lieu vao table Model
                     setNull();//Xoa trang Textfield
@@ -446,29 +409,25 @@ public class frmCustomer extends javax.swing.JPanel {
     private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
         String keyword = txtSearch.getText();
         try {
-            List<Customer> lst;
+            List<Product> lst;
             if (keyword.isEmpty()) {
                 // Nếu ô tìm kiếm trống, hiển thị tất cả khách hàng
-                lst = cus.getCustomerById();
+                lst = pd.getProductById();
             } else {
                 // Gọi phương thức tìm kiếm
-                lst = cus.searchCustomers(keyword);
+                lst = pd.searchCustomers(keyword);
             }
 
             // Cập nhật lại dữ liệu trong bảng
             ClearData(); // Xóa dữ liệu cũ trong tableModel
-            for (Customer item : lst) {
-                Object[] rows = {item.getId(), item.getName(), item.getEmail(), item.getPhone(), item.getAddress(), item.getTaxCode()};
+            for (Product item : lst) {
+                Object[] rows = {item.getPdId(), item.getPdName(), item.getPdPrice(), item.getPdDescription()};
                 tableModel.addRow(rows); // Thêm dòng dữ liệu mới vào tableModel
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }//GEN-LAST:event_txtSearchKeyReleased
-
-    private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtSearchActionPerformed
     public void ClearData() throws SQLException {
 //Lay chi so dong cuoi cung
         int n = tableModel.getRowCount() - 1;
@@ -478,20 +437,18 @@ public class frmCustomer extends javax.swing.JPanel {
     }
 
     private void setNull() {
-        this.txtName.setText(null);
-        this.txtEmail.setText(null);
-        this.txtPhone.setText(null);
-        this.txtAddress.setText(null);
-        this.txtTaxCode.setText(null);
-        this.txtName.requestFocus();
+        this.txtNameProduct.setText(null);
+        this.txtPriceProduct.setText(null);
+        this.txtADescriptionProduct.setText(null);
+        
+        this.txtNameProduct.requestFocus();
     }
 
     private void setKhoa(boolean a) {
-        this.txtName.setEnabled(!a);
-        this.txtEmail.setEnabled(!a);
-        this.txtPhone.setEnabled(!a);
-        this.txtAddress.setEnabled(!a);
-        this.txtTaxCode.setEnabled(!a);
+        this.txtNameProduct.setEnabled(!a);
+        this.txtPriceProduct.setEnabled(!a);
+        this.txtADescriptionProduct.setEnabled(!a);
+        
     }
 
     private void setButton(boolean a) {
@@ -512,20 +469,17 @@ public class frmCustomer extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblCustomer;
-    private javax.swing.JTextField txtAddress;
-    private javax.swing.JTextField txtEmail;
-    private javax.swing.JTextField txtName;
-    private javax.swing.JTextField txtPhone;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable tblProduct;
+    private javax.swing.JTextArea txtADescriptionProduct;
+    private javax.swing.JTextField txtNameProduct;
+    private javax.swing.JTextField txtPriceProduct;
     private javax.swing.JTextField txtSearch;
-    private javax.swing.JTextField txtTaxCode;
     // End of variables declaration//GEN-END:variables
 }

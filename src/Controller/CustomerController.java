@@ -5,11 +5,10 @@
 package Controller;
 
 import java.sql.*;
-import DAO.CustomerDAO;
+import db.DatabaseConnection;
 import Model.Customer;
-import View.frmCustomer;
-import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -17,37 +16,143 @@ import javax.swing.table.DefaultTableModel;
  */
 public class CustomerController {
 
-    private final CustomerDAO cus = new CustomerDAO();
-    private final DefaultTableModel tableModel = new DefaultTableModel();
-    private frmCustomer view;    // View chứa giao diện người dùng
-    private CustomerDAO model;    // DAO để thao tác với cơ sở dữ liệu
-    // Constructor: khởi tạo View và Model
-
-    public CustomerController(frmCustomer view, CustomerDAO model) {
-        this.view = view;
-        this.model = model;
-
-        // Lắng nghe sự kiện nút "Thêm khách hàng"
-        this.view.getBtnAddCustomer().addActionListener(e -> addCustomer());
-    }
-    
-    private void addCustomer() {
-        // Lấy thông tin khách hàng từ View
-        String name = view.getName();
-        String email = view.getEmail();
-        String phone = view.getPhone();
-        String address = view.getAddress();
-        String taxCode = view.getTaxCode();
-
-        // Tạo đối tượng Customer từ thông tin lấy được
-        Customer customer = new Customer(name, email, phone, address, taxCode);
-
-        // Gọi phương thức thêm khách hàng trong CustomerDAO
+    public List<Customer> getCustomerById() throws SQLException {
+        String sql = "SELECT * FROM Customer";
+        List<Customer> list = new ArrayList<>();
         try {
-            model.addCustomer(customer);
-            JOptionPane.showMessageDialog(view, "Khách hàng đã được thêm thành công!");
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(view, "Lỗi khi thêm khách hàng!");
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                Customer customer = new Customer();
+                customer.setId(rs.getInt("CustomerID"));
+                customer.setName(rs.getString("CustomerName"));
+                customer.setEmail(rs.getString("Email"));
+                customer.setPhone(rs.getString("Phone"));
+                customer.setAddress(rs.getString("Address"));
+                customer.setTaxCode(rs.getString("TaxCode"));
+                list.add(customer);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
         }
+        return list;
+    }
+
+    public Customer getCustomerById(int customerId) throws SQLException {
+        String sql = "SELECT * FROM Customer WHERE CustomerID = ?";
+        Customer customer = null;
+
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+
+            stmt.setInt(1, customerId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                customer = new Customer();
+                customer.setId(rs.getInt("CustomerID"));
+                customer.setName(rs.getString("CustomerName"));
+                customer.setEmail(rs.getString("Email"));
+                customer.setPhone(rs.getString("Phone"));
+                customer.setAddress(rs.getString("Address"));
+                customer.setTaxCode(rs.getString("TaxCode"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return customer;
+    }
+
+    public boolean addCustomer(Customer customer) throws SQLException {
+        String sql = "INSERT INTO Customer (CustomerName, Email, Phone, Address, TaxCode) VALUES (?, ?, ?, ?, ?)";
+
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+
+            pstmt.setString(1, customer.getName());
+            pstmt.setString(2, customer.getEmail());
+            pstmt.setString(3, customer.getPhone());
+            pstmt.setString(4, customer.getAddress());
+            pstmt.setString(5, customer.getTaxCode());
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+
+        }
+    }
+
+    public boolean EditCustomer(Customer customer) throws SQLException {
+        String sql = "UPDATE Customer SET CustomerName = ?, Email = ?, Phone = ?, Address = ?, TaxCode = ? WHERE CustomerID = ?";
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+
+            pstmt.setString(1, customer.getName());
+            pstmt.setString(2, customer.getEmail());
+            pstmt.setString(3, customer.getPhone());
+            pstmt.setString(4, customer.getAddress());
+            pstmt.setString(5, customer.getTaxCode());
+            pstmt.setInt(6, customer.getId()); // Đảm bảo bạn đã set ID của customer
+
+            int rowsUpdated = pstmt.executeUpdate();
+            return rowsUpdated > 0; // Trả về true nếu có ít nhất một bản ghi được cập nhật
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public boolean DeleteData(int id) throws SQLException {
+        String sql = "DELETE FROM Customer WHERE CustomerID=?";
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+
+            pstmt.setInt(1, id);
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    public List<Customer> searchCustomers(String keyword) throws SQLException {
+        String sql = "SELECT * FROM Customer WHERE CustomerName LIKE ? OR Email LIKE ? OR Phone LIKE ? OR Address LIKE ? OR TaxCode LIKE ?";
+        List<Customer> list = new ArrayList<>();
+
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+
+            // Sử dụng wildcard '%' để tìm kiếm
+            pstmt.setString(1, "%" + keyword + "%");
+            pstmt.setString(2, "%" + keyword + "%");
+            pstmt.setString(3, "%" + keyword + "%");
+            pstmt.setString(4, "%" + keyword + "%");
+            pstmt.setString(5, "%" + keyword + "%");
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                Customer customer = new Customer();
+                customer.setId(rs.getInt("CustomerID"));
+                customer.setName(rs.getString("CustomerName"));
+                customer.setEmail(rs.getString("Email"));
+                customer.setPhone(rs.getString("Phone"));
+                customer.setAddress(rs.getString("Address"));
+                customer.setTaxCode(rs.getString("TaxCode"));
+                list.add(customer);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return list;
     }
 }

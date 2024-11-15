@@ -8,12 +8,12 @@ package View;
  *
  * @author Manh
  */
-public class Employee extends javax.swing.JPanel {
+public class Product1 extends javax.swing.JPanel {
 
     /**
      * Creates new form Customer
      */
-    public Employee() {
+    public Product1() {
         initComponents();
     }
 
