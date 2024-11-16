@@ -215,7 +215,7 @@ public class AddInvoice extends javax.swing.JFrame {
             String cusname = cbbCustomer.getSelectedItem().toString();
             int customerId = iv.getCustomerIdByName(cusname); // Lấy CustomerID
             BigDecimal totalamount = new BigDecimal(txtTotalAmount.getText());
-            BigDecimal taxamount = new BigDecimal(txtTaxAmount.getText());
+//            BigDecimal taxamount = new BigDecimal(txtTaxAmount.getText());
             String status = cbbStatus.getSelectedItem().toString();
             Date ivdate = (Date) InvoiceDate.getDate();
             Date duedate = (Date) DueDate.getDate();
@@ -231,7 +231,7 @@ public class AddInvoice extends javax.swing.JFrame {
             obj.setIvNumber(ivnumber);
             obj.setCusId(customerId); // Sử dụng CustomerID
             obj.setTotalAmount(totalamount);
-            obj.setTaxAmount(taxamount);
+//            obj.setTaxAmount(taxamount);
             obj.setStatus(status);
             obj.setIvDate(ivdate);
             obj.setDueDate(duedate);

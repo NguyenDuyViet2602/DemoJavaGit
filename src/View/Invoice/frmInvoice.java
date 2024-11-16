@@ -193,19 +193,19 @@ public class frmInvoice extends javax.swing.JPanel {
         if (selectedRow >= 0) {
             try {
                 // Lấy dữ liệu từ hàng đã chọn
-                int ivid = Integer.parseInt(tblInvoice.getValueAt(selectedRow, 0).toString());
-                String ivnumber = tblInvoice.getValueAt(selectedRow, 1).toString();
-                String cusname = tblInvoice.getValueAt(selectedRow, 2).toString();
+                int ivid = parseInteger(tblInvoice.getValueAt(selectedRow, 0));
+                String ivnumber = tblInvoice.getValueAt(selectedRow, 1) != null ? tblInvoice.getValueAt(selectedRow, 1).toString() : "";
+                String cusname = tblInvoice.getValueAt(selectedRow, 2) != null ? tblInvoice.getValueAt(selectedRow, 2).toString() : "";
 
                 // Chuyển đổi giá trị TotalAmount và TaxAmount từ String sang BigDecimal
-                BigDecimal totalamount = new BigDecimal(tblInvoice.getValueAt(selectedRow, 3).toString().replace(",", ""));
-                BigDecimal taxamount = new BigDecimal(tblInvoice.getValueAt(selectedRow, 4).toString().replace(",", ""));
+                BigDecimal totalamount = parseBigDecimal(tblInvoice.getValueAt(selectedRow, 3));
+                BigDecimal taxamount = parseBigDecimal(tblInvoice.getValueAt(selectedRow, 4));
 
                 // Chuyển đổi Invoice Date và Due Date từ String hoặc sql.Date sang java.util.Date
-                Date ivDate = new java.util.Date(((java.sql.Date) tblInvoice.getValueAt(selectedRow, 5)).getTime());
-                Date dueDate = new java.util.Date(((java.sql.Date) tblInvoice.getValueAt(selectedRow, 6)).getTime());
+                Date ivDate = parseDate(tblInvoice.getValueAt(selectedRow, 5));
+                Date dueDate = parseDate(tblInvoice.getValueAt(selectedRow, 6));
 
-                String status = tblInvoice.getValueAt(selectedRow, 7).toString();
+                String status = tblInvoice.getValueAt(selectedRow, 7) != null ? tblInvoice.getValueAt(selectedRow, 7).toString() : "";
 
                 // Mở form UpdateInvoice
                 UpdateInvoice updateInvoice = new UpdateInvoice(this, ivid, ivnumber, cusname, totalamount, taxamount, ivDate, dueDate, status);
@@ -218,7 +218,42 @@ public class frmInvoice extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một hóa đơn để cập nhật", "Thông báo", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnUpdateInvoiceActionPerformed
+// Hàm trợ giúp chuyển đổi kiểu Integer
 
+    private int parseInteger(Object value) {
+        if (value != null && !value.toString().isEmpty()) {
+            try {
+                return Integer.parseInt(value.toString());
+            } catch (NumberFormatException e) {
+                return 0; // Hoặc bạn có thể trả về giá trị mặc định khác
+            }
+        }
+        return 0;
+    }
+
+// Hàm trợ giúp chuyển đổi kiểu BigDecimal
+    private BigDecimal parseBigDecimal(Object value) {
+        if (value != null && !value.toString().isEmpty()) {
+            try {
+                return new BigDecimal(value.toString().replace(",", ""));
+            } catch (NumberFormatException e) {
+                return BigDecimal.ZERO; // Hoặc bạn có thể trả về giá trị mặc định khác
+            }
+        }
+        return BigDecimal.ZERO;
+    }
+
+// Hàm trợ giúp chuyển đổi kiểu Date
+    private Date parseDate(Object value) {
+        if (value != null) {
+            try {
+                return new java.util.Date(((java.sql.Date) value).getTime());
+            } catch (Exception e) {
+                return null; // Hoặc trả về giá trị mặc định
+            }
+        }
+        return null;
+    }
     private void txtSearchInvoiceKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchInvoiceKeyReleased
         String keyword = txtSearchInvoice.getText();
         try {

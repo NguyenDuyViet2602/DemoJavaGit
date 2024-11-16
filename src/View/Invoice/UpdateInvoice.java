@@ -270,13 +270,13 @@ public class UpdateInvoice extends javax.swing.JFrame {
             BigDecimal totalamount, taxamount;
             try {
                 totalamount = new BigDecimal(txtTotalAmount.getText().trim());
-                taxamount = new BigDecimal(txtTaxAmount.getText().trim());
+//                taxamount = new BigDecimal(txtTaxAmount.getText().trim());
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Số tiền phải là giá trị số", "Thông báo", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
-            String status = cbbStatus.getSelectedItem() != null ? cbbStatus.getSelectedItem().toString() : "";
+            String status = cbbStatus.getSelectedItem() != null ? cbbStatus.getSelectedItem().toString() : "Pending"; // Default value
             Date ivdate = (Date) InvoiceDate.getDate();
             Date duedate = (Date) DueDate.getDate();
 
@@ -296,7 +296,7 @@ public class UpdateInvoice extends javax.swing.JFrame {
             obj.setIvNumber(ivnumber);
             obj.setCusId(customerId);
             obj.setTotalAmount(totalamount);
-            obj.setTaxAmount(taxamount);
+//            obj.setTaxAmount(taxamount);
             obj.setIvDate(ivdate);
             obj.setDueDate(duedate);
             obj.setStatus(status);
