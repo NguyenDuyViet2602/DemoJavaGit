@@ -2,12 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package View.Invoice;
+package View.InvoiceDetail;
 
-import Controller.InvoiceController;
-import Model.Invoice;
-import Model.Product;
-import View.Invoice.AddInvoice;
+import View.Invoice.*;
+import Controller.ChiTietHoaDonController;
+import Model.HoaDon;
+import Model.ChiTietHoaDon;
+import Model.SanPham;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
@@ -20,37 +21,52 @@ import javax.swing.JOptionPane;
  *
  * @author Manh
  */
-public class frmInvoice extends javax.swing.JPanel {
+public class frmChiTietHoaDon extends javax.swing.JPanel {
 
     private boolean cothem = true;
-    private final InvoiceController iv = new InvoiceController();
+    private final ChiTietHoaDonController chiTietHoaDonController = new ChiTietHoaDonController();
     private final DefaultTableModel tableModel = new DefaultTableModel();
 
     /**
      * Creates new form frmInvoice
      */
-    public frmInvoice() throws SQLException {
+    public frmChiTietHoaDon() throws SQLException {
         initComponents();
-        String[] colsName = {"Id", "Name Number", "Name Customer", "Total Amount", "Tax Amount", "Invoice Date", "DueDate", "Status"}; // Đặt tiêu đề cột cho tableModel
+        String[] colsName = {"Id", "Số Hóa Đơn", "Tên Sản Phẩm", "Số Lượng", "Đơn Giá", "Tổng Tiền"}; // Đặt tiêu đề cột cho tableModel
         tableModel.setColumnIdentifiers(colsName);
-        tblInvoice.setModel(tableModel); // Kết nối jtable với tableModel
-        ShowData();
+        tblChiTietHoaDon.setModel(tableModel); // Kết nối jtable với tableModel
+        hienThiDuLieu();
 
     }
 
-    public void ShowData() throws SQLException {
-        List<Invoice> lst = iv.getInvoiceById(); // Lấy danh sách loại sản phẩm từ cơ sở dữ liệu
+    public void hienThiDuLieu() throws SQLException {
+        // Lấy danh sách hóa đơn từ cơ sở dữ liệu
+        List<ChiTietHoaDon> danhSach = chiTietHoaDonController.getChiTietHoaDonById();
         try {
             // Xóa dữ liệu cũ trước khi thêm mới
             tableModel.setRowCount(0);
-            for (Invoice item : lst) { // Duyệt qua từng dòng của lst
-                Object[] rows = {item.getIvId(), item.getIvNumber(), item.getCusName(), item.getTotalAmount(), item.getTaxAmount(), item.getIvDate(), item.getDueDate(), item.getStatus()};
-                // Giả sử các phương thức getId, getTenLoai, getMoTa đã được định nghĩa trong lớp LoaiSP
-                tableModel.addRow(rows); // Đưa dòng dữ liệu vào tableModel
+
+            // Duyệt qua từng dòng của danh sách
+            for (ChiTietHoaDon item : danhSach) {
+                // Tạo một mảng đối tượng cho mỗi dòng
+                Object[] rows = {
+                    item.getChiTietHoaDonID(),
+                    item.getHoaDon().getSoHoaDon(),
+                    item.getSanPham().getTenSanPham(),
+                    item.getSoLuong(),
+                    item.getDonGia(),
+                    item.getThanhTien()
+                };
+                // Thêm dòng dữ liệu vào tableModel
+                tableModel.addRow(rows);
             }
         } catch (Exception e) {
+            // Xử lý các lỗi khác
+            System.err.println("Đã có lỗi xảy ra: " + e.getMessage());
             e.printStackTrace();
         }
+        // Xử lý lỗi SQL một cách chi tiết hơn
+
     }
 
     /**
@@ -64,36 +80,37 @@ public class frmInvoice extends javax.swing.JPanel {
 
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblInvoice = new javax.swing.JTable();
+        tblChiTietHoaDon = new javax.swing.JTable();
         btnAddInvoice = new javax.swing.JButton();
         btnUpdateInvoice = new javax.swing.JButton();
         btnDeleteInvoice = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        txtSearchInvoice = new javax.swing.JTextField();
+        txtTimKiemChiTietHoaDon = new javax.swing.JTextField();
 
-        tblInvoice.setModel(new javax.swing.table.DefaultTableModel(
+        tblChiTietHoaDon.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "Invoice Number", "Customer Name", "Total Amount", "TaxAmount", "InvoiceDate", "DueDate", "Status"
+                "ID", "Số hóa đơn", "Sản phẩm", "Số lượng", "Giá bán", "Thành tiền"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(tblInvoice);
+        jScrollPane1.setViewportView(tblChiTietHoaDon);
 
         btnAddInvoice.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnAddInvoice.setText("Add");
+        btnAddInvoice.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/8666718_plus_circle_icon.png"))); // NOI18N
+        btnAddInvoice.setText("Thêm");
         btnAddInvoice.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddInvoiceActionPerformed(evt);
@@ -101,7 +118,8 @@ public class frmInvoice extends javax.swing.JPanel {
         });
 
         btnUpdateInvoice.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnUpdateInvoice.setText("Update");
+        btnUpdateInvoice.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/8666806_edit_write_pen_icon (1).png"))); // NOI18N
+        btnUpdateInvoice.setText("Sửa");
         btnUpdateInvoice.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUpdateInvoiceActionPerformed(evt);
@@ -109,7 +127,8 @@ public class frmInvoice extends javax.swing.JPanel {
         });
 
         btnDeleteInvoice.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnDeleteInvoice.setText("Delete");
+        btnDeleteInvoice.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/8666597_trash_2_icon.png"))); // NOI18N
+        btnDeleteInvoice.setText("Xóa");
         btnDeleteInvoice.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDeleteInvoiceActionPerformed(evt);
@@ -119,9 +138,9 @@ public class frmInvoice extends javax.swing.JPanel {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setText("Search:");
 
-        txtSearchInvoice.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtTimKiemChiTietHoaDon.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtSearchInvoiceKeyReleased(evt);
+                txtTimKiemChiTietHoaDonKeyReleased(evt);
             }
         });
 
@@ -137,14 +156,14 @@ public class frmInvoice extends javax.swing.JPanel {
                 .addGap(134, 134, 134)
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addComponent(txtSearchInvoice, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtTimKiemChiTietHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(110, 110, 110)
                 .addComponent(btnAddInvoice)
                 .addGap(47, 47, 47)
                 .addComponent(btnUpdateInvoice)
                 .addGap(39, 39, 39)
                 .addComponent(btnDeleteInvoice)
-                .addContainerGap(236, Short.MAX_VALUE))
+                .addContainerGap(210, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -155,7 +174,7 @@ public class frmInvoice extends javax.swing.JPanel {
                     .addComponent(btnUpdateInvoice)
                     .addComponent(btnDeleteInvoice)
                     .addComponent(jLabel1)
-                    .addComponent(txtSearchInvoice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtTimKiemChiTietHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(46, 46, 46)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 406, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -163,21 +182,22 @@ public class frmInvoice extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddInvoiceActionPerformed
-        AddInvoice addinvoice = new AddInvoice(this); // Truyền tham chiếu của frmInvoice
-        addinvoice.setVisible(true);
+        ThemChiTietHoaDon themChiTietHoaDon = new ThemChiTietHoaDon(this); // Truyền tham chiếu của frmInvoice
+        themChiTietHoaDon.setVisible(true);
+        
     }//GEN-LAST:event_btnAddInvoiceActionPerformed
 
     private void btnDeleteInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteInvoiceActionPerformed
-        int row = this.tblInvoice.getSelectedRow();
-        int id = Integer.parseInt(this.tblInvoice.getModel().getValueAt(row, 0).toString());
+        int row = this.tblChiTietHoaDon.getSelectedRow();
+        int id = Integer.parseInt(this.tblChiTietHoaDon.getModel().getValueAt(row, 0).toString());
         try {
             if (id == 0) {
                 JOptionPane.showMessageDialog(null, "Chon 1 loai SP de xoa", "Thong bao", 1);
             } else {
                 if (JOptionPane.showConfirmDialog(null, "Ban muon xoa loai " + id + "nay hay khong ? ", "Thong bao", 2) == 0) {
-                    iv.DeleteData(id);//goi ham xoa du lieu theo ma loai
-                    ClearData();//Xoa du lieu trong tableModel
-                    ShowData();//Do du lieu vao table Model
+                    chiTietHoaDonController.xoaHoaDon(id);//goi ham xoa du lieu theo ma loai
+                    xoaDuLieu();//Xoa du lieu trong tableModel
+                    hienThiDuLieu();//Do du lieu vao table Model
 
                 }
             }
@@ -187,29 +207,23 @@ public class frmInvoice extends javax.swing.JPanel {
     }//GEN-LAST:event_btnDeleteInvoiceActionPerformed
 
     private void btnUpdateInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateInvoiceActionPerformed
-        int selectedRow = tblInvoice.getSelectedRow();
+        int selectedRow = tblChiTietHoaDon.getSelectedRow();
 
         // Kiểm tra xem đã chọn một hàng trong bảng chưa
         if (selectedRow >= 0) {
             try {
                 // Lấy dữ liệu từ hàng đã chọn
-                int ivid = parseInteger(tblInvoice.getValueAt(selectedRow, 0));
-                String ivnumber = tblInvoice.getValueAt(selectedRow, 1) != null ? tblInvoice.getValueAt(selectedRow, 1).toString() : "";
-                String cusname = tblInvoice.getValueAt(selectedRow, 2) != null ? tblInvoice.getValueAt(selectedRow, 2).toString() : "";
-
+                int cthdId = Integer.parseInt(tblChiTietHoaDon.getValueAt(selectedRow, 0).toString());
+                String hdNumber = tblChiTietHoaDon.getValueAt(selectedRow, 1).toString();
+                String sanPham = tblChiTietHoaDon.getValueAt(selectedRow, 2).toString();
+                int soLuong = Integer.parseInt(tblChiTietHoaDon.getValueAt(selectedRow, 3).toString());
                 // Chuyển đổi giá trị TotalAmount và TaxAmount từ String sang BigDecimal
-                BigDecimal totalamount = parseBigDecimal(tblInvoice.getValueAt(selectedRow, 3));
-                BigDecimal taxamount = parseBigDecimal(tblInvoice.getValueAt(selectedRow, 4));
-
-                // Chuyển đổi Invoice Date và Due Date từ String hoặc sql.Date sang java.util.Date
-                Date ivDate = parseDate(tblInvoice.getValueAt(selectedRow, 5));
-                Date dueDate = parseDate(tblInvoice.getValueAt(selectedRow, 6));
-
-                String status = tblInvoice.getValueAt(selectedRow, 7) != null ? tblInvoice.getValueAt(selectedRow, 7).toString() : "";
+                BigDecimal giaBan = new BigDecimal(tblChiTietHoaDon.getValueAt(selectedRow, 4).toString().replace(",", ""));
+                BigDecimal thanhTien = new BigDecimal(tblChiTietHoaDon.getValueAt(selectedRow, 5).toString().replace(",", ""));
 
                 // Mở form UpdateInvoice
-                UpdateInvoice updateInvoice = new UpdateInvoice(this, ivid, ivnumber, cusname, totalamount, taxamount, ivDate, dueDate, status);
-                updateInvoice.setVisible(true);
+                CapNhatChiTietHoaDon capNhatChiTietHoaDon = new CapNhatChiTietHoaDon(this, cthdId, hdNumber, sanPham, soLuong, giaBan, thanhTien);
+                capNhatChiTietHoaDon.setVisible(true);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Có lỗi xảy ra khi lấy dữ liệu: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
                 e.printStackTrace();
@@ -218,66 +232,36 @@ public class frmInvoice extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một hóa đơn để cập nhật", "Thông báo", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnUpdateInvoiceActionPerformed
-// Hàm trợ giúp chuyển đổi kiểu Integer
 
-    private int parseInteger(Object value) {
-        if (value != null && !value.toString().isEmpty()) {
-            try {
-                return Integer.parseInt(value.toString());
-            } catch (NumberFormatException e) {
-                return 0; // Hoặc bạn có thể trả về giá trị mặc định khác
-            }
-        }
-        return 0;
-    }
-
-// Hàm trợ giúp chuyển đổi kiểu BigDecimal
-    private BigDecimal parseBigDecimal(Object value) {
-        if (value != null && !value.toString().isEmpty()) {
-            try {
-                return new BigDecimal(value.toString().replace(",", ""));
-            } catch (NumberFormatException e) {
-                return BigDecimal.ZERO; // Hoặc bạn có thể trả về giá trị mặc định khác
-            }
-        }
-        return BigDecimal.ZERO;
-    }
-
-// Hàm trợ giúp chuyển đổi kiểu Date
-    private Date parseDate(Object value) {
-        if (value != null) {
-            try {
-                return new java.util.Date(((java.sql.Date) value).getTime());
-            } catch (Exception e) {
-                return null; // Hoặc trả về giá trị mặc định
-            }
-        }
-        return null;
-    }
-    private void txtSearchInvoiceKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchInvoiceKeyReleased
-        String keyword = txtSearchInvoice.getText();
+    private void txtTimKiemChiTietHoaDonKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTimKiemChiTietHoaDonKeyReleased
+        String keyword = txtTimKiemChiTietHoaDon.getText();
         try {
-            List<Invoice> lst;
+            List<ChiTietHoaDon> lst;
             if (keyword.isEmpty()) {
                 // Nếu ô tìm kiếm trống, hiển thị tất cả khách hàng
-                lst = iv.getInvoiceById();
+                lst = chiTietHoaDonController.getChiTietHoaDonById();
             } else {
                 // Gọi phương thức tìm kiếm
-                lst = iv.searchInvoice(keyword);
+                lst = chiTietHoaDonController.timKiemChiTietHoaDon(keyword);
             }
 
             // Cập nhật lại dữ liệu trong bảng
-            ClearData(); // Xóa dữ liệu cũ trong tableModel
-            for (Invoice item : lst) {
-                Object[] rows = {item.getIvId(), item.getIvNumber(), item.getCusName(), item.getTotalAmount(), item.getTaxAmount(), item.getIvDate(), item.getDueDate(), item.getStatus()};
+            xoaDuLieu(); // Xóa dữ liệu cũ trong tableModel
+            for (ChiTietHoaDon item : lst) {
+                Object[] rows = {item.getChiTietHoaDonID(),
+                    item.getHoaDon().getSoHoaDon(),
+                    item.getSanPham().getTenSanPham(),
+                    item.getSoLuong(),
+                    item.getDonGia(),
+                    item.getThanhTien()};
                 tableModel.addRow(rows); // Thêm dòng dữ liệu mới vào tableModel
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }//GEN-LAST:event_txtSearchInvoiceKeyReleased
+    }//GEN-LAST:event_txtTimKiemChiTietHoaDonKeyReleased
 
-    public void ClearData() throws SQLException {
+    public void xoaDuLieu() throws SQLException {
 //Lay chi so dong cuoi cung
         int n = tableModel.getRowCount() - 1;
         for (int i = n; i >= 0; i--) {
@@ -286,7 +270,7 @@ public class frmInvoice extends javax.swing.JPanel {
     }
 
     public void refreshData() throws SQLException {
-        ShowData(); // Gọi phương thức hiện tại để cập nhật dữ liệu
+        hienThiDuLieu(); // Gọi phương thức hiện tại để cập nhật dữ liệu
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddInvoice;
@@ -295,7 +279,7 @@ public class frmInvoice extends javax.swing.JPanel {
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblInvoice;
-    private javax.swing.JTextField txtSearchInvoice;
+    private javax.swing.JTable tblChiTietHoaDon;
+    private javax.swing.JTextField txtTimKiemChiTietHoaDon;
     // End of variables declaration//GEN-END:variables
 }

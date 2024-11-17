@@ -4,10 +4,10 @@
  */
 package View.InvoiceDetail;
 
-import View.Invoice.*;
-import Controller.InvoiceDetailController;
-import Model.Invoice;
-import Model.Product;
+import Controller.ChiTietHoaDonController;
+import Model.ChiTietHoaDon;
+import Model.HoaDon;
+import Model.SanPham;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,32 +21,65 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Manh
  */
-public class AddInvoiceDetail extends javax.swing.JFrame {
+public class ThemChiTietHoaDon extends javax.swing.JFrame {
 
-    private final InvoiceDetailController ivdt = new InvoiceDetailController();
+    private final ChiTietHoaDonController ivdt = new ChiTietHoaDonController();
     private boolean cothem = true;
     private final DefaultTableModel tableModel = new DefaultTableModel();
-    private frmInvoiceDetail form;
+    private frmChiTietHoaDon form;
 
     /**
      * Creates new form AddInvoice
      */
-    public AddInvoiceDetail(frmInvoiceDetail form) {
+    public ThemChiTietHoaDon(frmChiTietHoaDon form) {
         initComponents();
         this.form = form; // Lưu tham chiếu của frmInvoice
         setLocationRelativeTo(null);
-        ShowDataCombo();
+        hienThiDuLieuSanPhamCombo();
+        hienThiDuLieuSoHoaDonCombo();
+        cbbSanPham.addActionListener(e -> capNhatGiaBanTheoSanPham());
+        capNhatGiaBanTheoSanPham();
     }
 
-    final void ShowDataCombo() {
+    final void hienThiDuLieuSanPhamCombo() {
         ResultSet result = null;
         try {
-            result = ivdt.showInvoiceDetail();
+            result = ivdt.hienThiChiTietSanPham();
             while (result.next()) {
-                cbbProduct.addItem(result.getString("ProductName"));
+                cbbSanPham.addItem(result.getString("TenSanPham"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    final void hienThiDuLieuSoHoaDonCombo() {
+        ResultSet result = null;
+        try {
+            result = ivdt.hienThiChiTietHoaDon();
+            while (result.next()) {
+                cbbSoHoaDon.addItem(result.getString("SoHoaDon"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void capNhatGiaBanTheoSanPham() {
+        try {
+            // Lấy tên sản phẩm từ ComboBox
+            String tenSanPham = (String) cbbSanPham.getSelectedItem();
+
+            // Kiểm tra nếu tên sản phẩm không null
+            if (tenSanPham != null && !tenSanPham.isEmpty()) {
+                // Gọi controller để lấy giá bán
+                BigDecimal giaBan = ivdt.getGiaBanByTenSanPham(tenSanPham);
+
+                // Hiển thị giá bán lên txtGiaBan
+                txtGiaBan.setText(giaBan.toString());
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Lỗi khi lấy giá bán sản phẩm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -62,11 +95,13 @@ public class AddInvoiceDetail extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        txtInvoiceNumber = new javax.swing.JTextField();
-        txtQuantity = new javax.swing.JTextField();
+        txtSoLuong = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         btnSaveInvoiceDetail = new javax.swing.JButton();
-        cbbProduct = new javax.swing.JComboBox<>();
+        cbbSanPham = new javax.swing.JComboBox<>();
+        txtGiaBan = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        cbbSoHoaDon = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -74,28 +109,31 @@ public class AddInvoiceDetail extends javax.swing.JFrame {
         jLabel1.setText("Thêm chi tiết hóa đơn");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel2.setText("Invoice Number:");
+        jLabel2.setText("Số hóa đơn:");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel3.setText("Product");
+        jLabel3.setText("Sản phẩm");
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel5.setText("Quantity:");
 
         btnSaveInvoiceDetail.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnSaveInvoiceDetail.setText("Save");
+        btnSaveInvoiceDetail.setText("Lưu");
         btnSaveInvoiceDetail.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveInvoiceDetailActionPerformed(evt);
             }
         });
 
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel4.setText("Giá bán:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(305, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(btnSaveInvoiceDetail)
@@ -106,19 +144,17 @@ public class AddInvoiceDetail extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(54, 54, 54)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(cbbProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(txtInvoiceNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 126, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5))
-                        .addGap(22, 22, 22))))
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3)
+                    .addComponent(cbbSanPham, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbbSoHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txtSoLuong, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel4)
+                    .addComponent(txtGiaBan))
+                .addGap(22, 22, 22))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -130,16 +166,22 @@ public class AddInvoiceDetail extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addGap(16, 16, 16)
-                        .addComponent(txtQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtSoLuong, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel4))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
-                        .addGap(10, 10, 10)
-                        .addComponent(txtInvoiceNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addGap(11, 11, 11)
+                        .addComponent(cbbSoHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel3)))
                 .addGap(18, 18, 18)
-                .addComponent(cbbProduct, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 94, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(cbbSanPham, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(txtGiaBan, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(7, 7, 7)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 88, Short.MAX_VALUE)
                 .addComponent(btnSaveInvoiceDetail)
                 .addGap(90, 90, 90))
         );
@@ -149,31 +191,33 @@ public class AddInvoiceDetail extends javax.swing.JFrame {
 
     private void btnSaveInvoiceDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveInvoiceDetailActionPerformed
         try {
-            String ivnumber = txtInvoiceNumber.getText();
-            String productName = cbbProduct.getSelectedItem().toString();
-            int productId = ivdt.getProductIdByName(productName); // Lấy CustomerID
-            BigDecimal quantity = new BigDecimal(txtQuantity.getText());
-            BigDecimal taxamount = new BigDecimal(txtTaxAmount.getText());
-            String status = cbbStatus.getSelectedItem().toString();
-            Date ivdate = (Date) InvoiceDate.getDate();
-            Date duedate = (Date) DueDate.getDate();
+            String soHoaDon = cbbSoHoaDon.getSelectedItem().toString();
+            String tenSanPham = cbbSanPham.getSelectedItem().toString();
+            int soLuong = Integer.parseInt(txtSoLuong.getText().trim());
+            BigDecimal giaBan = new BigDecimal(txtGiaBan.getText());
 
+            int sanPhamId = ivdt.getSanPhamIdByName(tenSanPham);
+            int hoaDonId = ivdt.getHoaDonIdByName(soHoaDon);
             // Kiểm tra thông tin nhập vào
-            if (ivdate == null || duedate == null || customerId == -1) {
+            if (soHoaDon == null || tenSanPham == null || sanPhamId == -1 || soLuong == -1) {
                 JOptionPane.showMessageDialog(null, "Vui lòng nhập đầy đủ thông tin", "Thông báo", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
             // Tạo đối tượng Invoice
-            Invoice obj = new Invoice();
-            obj.setIvNumber(ivnumber);
-            obj.setCusId(customerId); // Sử dụng CustomerID
-            obj.setTotalAmount(totalamount);
-            obj.setTaxAmount(taxamount);
-            obj.setStatus(status);
-            obj.setIvDate(ivdate);
-            obj.setDueDate(duedate);
-            iv.addInvoice(obj); // Thêm hóa đơn vào cơ sở dữ liệu
+            ChiTietHoaDon obj = new ChiTietHoaDon();
+
+            HoaDon hoaDon = new HoaDon();
+            hoaDon.setHoaDonId(hoaDonId);
+            obj.setHoaDon(hoaDon);
+
+            SanPham sanPham = new SanPham();
+            sanPham.setSanPhamId(sanPhamId);
+            obj.setSanPham(sanPham); // Sử dụng CustomerID
+
+            obj.setSoLuong(soLuong);
+            obj.setDonGia(giaBan);
+            ivdt.themChiTietHoaDon(obj); // Thêm hóa đơn vào cơ sở dữ liệu
 
             // Gọi phương thức cập nhật dữ liệu trong frmInvoice
             if (this.form != null) {
@@ -183,7 +227,7 @@ public class AddInvoiceDetail extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Thêm hóa đơn thành công");
             dispose(); // Đóng cửa sổ AddInvoice
         } catch (SQLException ex) {
-            Logger.getLogger(AddInvoiceDetail.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ThemChiTietHoaDon.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnSaveInvoiceDetailActionPerformed
 
@@ -193,12 +237,14 @@ public class AddInvoiceDetail extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSaveInvoiceDetail;
-    private javax.swing.JComboBox<String> cbbProduct;
+    private javax.swing.JComboBox<String> cbbSanPham;
+    private javax.swing.JComboBox<String> cbbSoHoaDon;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JTextField txtInvoiceNumber;
-    private javax.swing.JTextField txtQuantity;
+    private javax.swing.JTextField txtGiaBan;
+    private javax.swing.JTextField txtSoLuong;
     // End of variables declaration//GEN-END:variables
 }

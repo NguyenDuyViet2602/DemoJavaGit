@@ -7,8 +7,8 @@ package View;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import View.Invoice.frmInvoice;
-import View.InvoiceDetail.frmInvoiceDetail;
+import View.Invoice.frmHoaDon;
+import View.InvoiceDetail.frmChiTietHoaDon;
 
 /**
  *
@@ -53,7 +53,7 @@ public class Home extends javax.swing.JFrame {
 
         buttonGroup1.add(btnCustomers);
         btnCustomers.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnCustomers.setText("Customers");
+        btnCustomers.setText("Khách hàng");
         btnCustomers.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCustomersActionPerformed(evt);
@@ -62,7 +62,7 @@ public class Home extends javax.swing.JFrame {
 
         buttonGroup1.add(btnEmployee);
         btnEmployee.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnEmployee.setText("Employee");
+        btnEmployee.setText("Nhân viên");
         btnEmployee.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEmployeeActionPerformed(evt);
@@ -71,7 +71,7 @@ public class Home extends javax.swing.JFrame {
 
         buttonGroup1.add(Product);
         Product.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        Product.setText("Product");
+        Product.setText("Sản phẩm");
         Product.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ProductActionPerformed(evt);
@@ -80,7 +80,7 @@ public class Home extends javax.swing.JFrame {
 
         buttonGroup1.add(btnInvoiceDetail);
         btnInvoiceDetail.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnInvoiceDetail.setText("Invoice Detail");
+        btnInvoiceDetail.setText("Chi tiết hóa đơn");
         btnInvoiceDetail.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnInvoiceDetailActionPerformed(evt);
@@ -89,15 +89,15 @@ public class Home extends javax.swing.JFrame {
 
         buttonGroup1.add(btnUsers);
         btnUsers.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnUsers.setText("Users");
+        btnUsers.setText("Người dùng");
 
         buttonGroup1.add(btnReport);
         btnReport.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnReport.setText("Report");
+        btnReport.setText("Báo cáo");
 
         buttonGroup1.add(btnInvoice);
         btnInvoice.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnInvoice.setText("Invoice");
+        btnInvoice.setText("Hóa đơn");
         btnInvoice.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnInvoiceActionPerformed(evt);
@@ -196,7 +196,7 @@ public class Home extends javax.swing.JFrame {
 
     private void btnCustomersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCustomersActionPerformed
         try {
-            frmCustomer cus = new frmCustomer();
+            frmKhachHang cus = new frmKhachHang();
             System.out.println("Loading frmCustomer...");
             jpload.jPanelLoader(panel_load, cus);
         } catch (SQLException ex) {
@@ -211,7 +211,7 @@ public class Home extends javax.swing.JFrame {
 
     private void ProductActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ProductActionPerformed
         try {
-            frmProduct prd = new frmProduct();
+            frmSanPham prd = new frmSanPham();
             jpload.jPanelLoader(panel_load, prd);
         } catch (SQLException ex) {
             Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
@@ -220,7 +220,7 @@ public class Home extends javax.swing.JFrame {
 
     private void btnInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInvoiceActionPerformed
         try {
-            frmInvoice iv = new frmInvoice();
+            frmHoaDon iv = new frmHoaDon();
             jpload.jPanelLoader(panel_load, iv);
         } catch (SQLException ex) {
             Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
@@ -229,7 +229,7 @@ public class Home extends javax.swing.JFrame {
 
     private void btnInvoiceDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInvoiceDetailActionPerformed
         try {
-            frmInvoiceDetail ivdt = new frmInvoiceDetail();
+            frmChiTietHoaDon ivdt = new frmChiTietHoaDon();
             jpload.jPanelLoader(panel_load, ivdt);
         } catch (SQLException ex) {
             Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);

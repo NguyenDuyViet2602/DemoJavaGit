@@ -4,9 +4,9 @@
  */
 package View.Invoice;
 
-import Controller.InvoiceController;
-import Model.Invoice;
-import Model.Product;
+import Controller.HoaDonController;
+import Model.HoaDon;
+import Model.KhachHang;
 import com.toedter.calendar.JDateChooser;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
@@ -23,57 +23,73 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Manh
  */
-public class UpdateInvoice extends javax.swing.JFrame {
+public class CapNhatHoaDon extends javax.swing.JFrame {
 
-    private final InvoiceController iv = new InvoiceController();
+    private final HoaDonController iv = new HoaDonController();
     private boolean cothem = true;
     private final DefaultTableModel tableModel = new DefaultTableModel();
-    private frmInvoice form;
+    private frmHoaDon form;
 
     /**
      * Creates new form AddInvoice
      */
-    public UpdateInvoice(frmInvoice form, int ivid, String ivnumber, String cusname, BigDecimal totalamount, BigDecimal taxamount, Date ivDate, Date dueDate, String status) {
+    public CapNhatHoaDon(frmHoaDon form, int hoaDonId, String soHoaDon, String tenKhachHang,
+            BigDecimal tongTien, BigDecimal thueTien, Date ngayLapHoaDon,
+            Date ngayHanThanhToan, String trangThai) {
         this.form = form;
         initComponents();
         setLocationRelativeTo(null);
-        ShowDataCombo();
 
-        // Hiển thị InvoiceID và Invoice Number
-        txtInvoiceID.setText(String.valueOf(ivid));
-        txtInvoiceNumber.setText(ivnumber);
+        // Hiển thị danh sách khách hàng
+        hienThiDuLieuKhachHangCombo();
+        hienThiDuLieuTrangThaiCombo();
 
-        // Set giá trị cho ComboBox Customer
-        if (cusname != null) {
-            cbbCustomer.setSelectedItem(cusname);
+        // Hiển thị HoaDonID và Số Hóa Đơn
+        txtHoaDonID.setText(String.valueOf(hoaDonId));
+        txtSoHoaDon.setText(soHoaDon);
+
+        // Set giá trị cho ComboBox Khách Hàng
+        if (tenKhachHang != null) {
+            cbbKhachHang.setSelectedItem(tenKhachHang);
         }
 
         // Định dạng số tiền
         DecimalFormat df = new DecimalFormat("#,###.00");
 
-        // Hiển thị totalAmount
-        txtTotalAmount.setText(df.format(totalamount));
+        // Hiển thị Tổng Tiền
+        txtTongTien.setText(df.format(tongTien));
 
-        // Hiển thị taxAmount
-        txtTaxAmount.setText(df.format(taxamount));
+        // Hiển thị Tiền Thuế
+        txtThueTien.setText(df.format(thueTien));
 
-        // Hiển thị ngày hóa đơn và ngày đến hạn
-        InvoiceDate.setDate(ivDate); // Sử dụng `InvoiceDate` đã tạo từ NetBeans
-        DueDate.setDate(dueDate);    // Sử dụng `DueDate` đã tạo từ NetBeans
+        // Hiển thị Ngày Lập Hóa Đơn và Ngày Hạn Thanh Toán
+        NgayLapHoaDon.setDate(ngayLapHoaDon);  // Sử dụng `NgayLapHoaDon` đã tạo từ NetBeans
+        NgayHanThanhToan.setDate(ngayHanThanhToan);  // Sử dụng `NgayHanThanhToan` đã tạo từ NetBeans
 
-        // Set trạng thái
-        if (status != null) {
-            cbbStatus.setSelectedItem(status);
+        // Set Trạng Thái
+        if (trangThai != null) {
+            cbbTrangThai.setSelectedItem(trangThai);
         }
-
     }
 
-    final void ShowDataCombo() {
+    final void hienThiDuLieuKhachHangCombo() {
         ResultSet result = null;
         try {
-            result = iv.showInvoice();
+            result = iv.hienThiHoaDonKhachHang();
             while (result.next()) {
-                cbbCustomer.addItem(result.getString("CustomerName"));
+                cbbKhachHang.addItem(result.getString("TenKhachHang"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    final void hienThiDuLieuTrangThaiCombo() {
+        ResultSet result = null;
+        try {
+            result = iv.hienThiHoaDonStatus();
+            while (result.next()) {
+                cbbTrangThai.addItem(result.getString("TrangThai"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -94,21 +110,21 @@ public class UpdateInvoice extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        txtInvoiceNumber = new javax.swing.JTextField();
-        txtTotalAmount = new javax.swing.JTextField();
-        txtTaxAmount = new javax.swing.JTextField();
+        txtSoHoaDon = new javax.swing.JTextField();
+        txtTongTien = new javax.swing.JTextField();
+        txtThueTien = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         btnSaveInvoice = new javax.swing.JButton();
-        cbbStatus = new javax.swing.JComboBox<>();
-        cbbCustomer = new javax.swing.JComboBox<>();
-        DueDate = new com.toedter.calendar.JDateChooser();
-        InvoiceDate = new com.toedter.calendar.JDateChooser();
+        cbbTrangThai = new javax.swing.JComboBox<>();
+        cbbKhachHang = new javax.swing.JComboBox<>();
+        NgayHanThanhToan = new com.toedter.calendar.JDateChooser();
+        NgayLapHoaDon = new com.toedter.calendar.JDateChooser();
         jLabel9 = new javax.swing.JLabel();
-        txtInvoiceID = new javax.swing.JTextField();
+        txtHoaDonID = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setText("Add Invoice");
@@ -142,10 +158,9 @@ public class UpdateInvoice extends javax.swing.JFrame {
             }
         });
 
-        cbbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Handle", "Pending" }));
-        cbbStatus.addActionListener(new java.awt.event.ActionListener() {
+        cbbTrangThai.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbbStatusActionPerformed(evt);
+                cbbTrangThaiActionPerformed(evt);
             }
         });
 
@@ -171,29 +186,29 @@ public class UpdateInvoice extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel2)
-                            .addComponent(txtInvoiceNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtSoHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3)
-                            .addComponent(cbbCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbbKhachHang, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel8)
-                                    .addComponent(DueDate, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(NgayHanThanhToan, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(45, 45, 45)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel7)
-                                    .addComponent(InvoiceDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                    .addComponent(NgayLapHoaDon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 126, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtTotalAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtTaxAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtTongTien, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtThueTien, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel5)
                             .addComponent(jLabel6)
                             .addComponent(jLabel4)
-                            .addComponent(cbbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cbbTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(22, 22, 22))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtInvoiceID, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtHoaDonID, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel9))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
@@ -205,25 +220,25 @@ public class UpdateInvoice extends javax.swing.JFrame {
                 .addGap(11, 11, 11)
                 .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtInvoiceID, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtHoaDonID, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(22, 22, 22)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addGap(10, 10, 10)
-                        .addComponent(txtTotalAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtTongTien, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel6))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(10, 10, 10)
-                        .addComponent(txtInvoiceNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtSoHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jLabel3)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(txtTaxAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtThueTien, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(181, 181, 181)
@@ -231,7 +246,7 @@ public class UpdateInvoice extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(DueDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(NgayHanThanhToan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                             .addComponent(jLabel7)
@@ -239,13 +254,13 @@ public class UpdateInvoice extends javax.swing.JFrame {
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(layout.createSequentialGroup()
                                                 .addGap(20, 20, 20)
-                                                .addComponent(InvoiceDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addComponent(NgayLapHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addGroup(layout.createSequentialGroup()
                                                 .addGap(18, 18, 18)
-                                                .addComponent(cbbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                                .addComponent(cbbTrangThai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                                 .addGap(118, 118, 118))))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(cbbCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cbbKhachHang, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(23, 23, 23)
                         .addComponent(jLabel8)))
                 .addGap(20, 20, 20))
@@ -256,71 +271,86 @@ public class UpdateInvoice extends javax.swing.JFrame {
 
     private void btnSaveInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveInvoiceActionPerformed
         try {
-            String ivnumber = txtInvoiceNumber.getText().trim();
-            String cusname = cbbCustomer.getSelectedItem() != null ? cbbCustomer.getSelectedItem().toString() : "";
-            int customerId = iv.getCustomerIdByName(cusname); // Lấy CustomerID
+            // Lấy thông tin từ các trường nhập liệu
+            String soHoaDon = txtSoHoaDon.getText().trim();
+            String tenKhachHang = cbbKhachHang.getSelectedItem() != null ? cbbKhachHang.getSelectedItem().toString() : "";
+
+            // Lấy KhachHangID từ tên khách hàng
+            int khachHangId = iv.getKhachHangIdByName(tenKhachHang);
 
             // Kiểm tra thông tin nhập vào
-            if (ivnumber.isEmpty() || cusname.isEmpty() || customerId == -1 || txtTotalAmount.getText().trim().isEmpty() || txtTaxAmount.getText().trim().isEmpty()) {
+            if (soHoaDon.isEmpty() || tenKhachHang.isEmpty() || khachHangId == -1
+                    || txtTongTien.getText().trim().isEmpty() || txtThueTien.getText().trim().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin", "Thông báo", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
             // Kiểm tra chuyển đổi sang BigDecimal
-            BigDecimal totalamount, taxamount;
-            try {
-                totalamount = new BigDecimal(txtTotalAmount.getText().trim());
-//                taxamount = new BigDecimal(txtTaxAmount.getText().trim());
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Số tiền phải là giá trị số", "Thông báo", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
+//            BigDecimal tongTien, thueTien;
+//            try {
+//                tongTien = new BigDecimal(txtTongTien.getText().trim());
+//                // Nếu muốn sử dụng thueTien, bỏ chú thích dòng dưới đây
+//                // thueTien = new BigDecimal(txtThueTien.getText().trim());
+//            } catch (NumberFormatException ex) {
+//                JOptionPane.showMessageDialog(this, "Số tiền phải là giá trị số", "Thông báo", JOptionPane.WARNING_MESSAGE);
+//                return;
+//            }
 
-            String status = cbbStatus.getSelectedItem() != null ? cbbStatus.getSelectedItem().toString() : "Pending"; // Default value
-            Date ivdate = (Date) InvoiceDate.getDate();
-            Date duedate = (Date) DueDate.getDate();
+            // Lấy giá trị trạng thái từ ComboBox
+            String trangThai = cbbTrangThai.getSelectedItem() != null ? cbbTrangThai.getSelectedItem().toString() : "Chưa thanh toán"; // Giá trị mặc định
 
-            // Kiểm tra ngày hóa đơn và ngày đến hạn
-            if (ivdate == null || duedate == null) {
+            // Lấy ngày lập hóa đơn và ngày hạn thanh toán
+            Date ngayLapHoaDon = (Date) NgayLapHoaDon.getDate();
+            Date ngayHanThanhToan = (Date) NgayHanThanhToan.getDate();
+
+            // Kiểm tra ngày lập hóa đơn và ngày hạn thanh toán
+            if (ngayLapHoaDon == null || ngayHanThanhToan == null) {
                 JOptionPane.showMessageDialog(this, "Vui lòng chọn ngày hợp lệ", "Thông báo", JOptionPane.WARNING_MESSAGE);
                 return;
             }
-            if (duedate.before(ivdate)) {
-                JOptionPane.showMessageDialog(this, "Ngày đến hạn không thể trước ngày hóa đơn", "Thông báo", JOptionPane.WARNING_MESSAGE);
+
+            if (ngayHanThanhToan.before(ngayLapHoaDon)) {
+                JOptionPane.showMessageDialog(this, "Ngày đến hạn không thể trước ngày lập hóa đơn", "Thông báo", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
-            // Tạo đối tượng Invoice
-            Invoice obj = new Invoice();
-            obj.setIvId(Integer.parseInt(txtInvoiceID.getText())); // Gán ID Hóa đơn
-            obj.setIvNumber(ivnumber);
-            obj.setCusId(customerId);
-            obj.setTotalAmount(totalamount);
-//            obj.setTaxAmount(taxamount);
-            obj.setIvDate(ivdate);
-            obj.setDueDate(duedate);
-            obj.setStatus(status);
+            // Tạo đối tượng HoaDon và gán giá trị
+            HoaDon obj = new HoaDon();
+            obj.setHoaDonId(Integer.parseInt(txtHoaDonID.getText()));
+            obj.setSoHoaDon(soHoaDon);
+            
+            KhachHang khachHang = new KhachHang();
+            khachHang.setKhachHangId(khachHangId);
+            obj.setKhachHang(khachHang);
+            
+//            obj.setTongTien(tongTien);
+            // obj.setThueTien(thueTien); // Nếu cần, có thể bỏ chú thích dòng này
+            obj.setNgayLapHoaDon(ngayLapHoaDon);
+            obj.setNgayHanThanhToan(ngayHanThanhToan);
+            obj.setTrangThai(trangThai);
 
             // Thực hiện sửa hóa đơn
-            iv.EditInvoice(obj);
+            iv.suaHoaDon(obj);
 
             // Hiển thị dữ liệu lên form
             if (this.form == null) {
-                this.form = new frmInvoice();
+                this.form = new frmHoaDon();
             }
-            this.form.ShowData();
+            this.form.hienThiDuLieu();
 
+            // Thông báo sửa hóa đơn thành công
             JOptionPane.showMessageDialog(this, "Sửa hóa đơn thành công");
-            dispose();
+            dispose(); // Đóng form sửa hóa đơn
         } catch (SQLException ex) {
-            Logger.getLogger(UpdateInvoice.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CapNhatHoaDon.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, "Lỗi khi sửa hóa đơn: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
+
     }//GEN-LAST:event_btnSaveInvoiceActionPerformed
 
-    private void cbbStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbStatusActionPerformed
+    private void cbbTrangThaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbbTrangThaiActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cbbStatusActionPerformed
+    }//GEN-LAST:event_cbbTrangThaiActionPerformed
 
     /**
      * @param args the command line arguments
@@ -330,11 +360,11 @@ public class UpdateInvoice extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private com.toedter.calendar.JDateChooser DueDate;
-    private com.toedter.calendar.JDateChooser InvoiceDate;
+    private com.toedter.calendar.JDateChooser NgayHanThanhToan;
+    private com.toedter.calendar.JDateChooser NgayLapHoaDon;
     private javax.swing.JButton btnSaveInvoice;
-    private javax.swing.JComboBox<String> cbbCustomer;
-    private javax.swing.JComboBox<String> cbbStatus;
+    private javax.swing.JComboBox<String> cbbKhachHang;
+    private javax.swing.JComboBox<String> cbbTrangThai;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -344,9 +374,9 @@ public class UpdateInvoice extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JTextField txtInvoiceID;
-    private javax.swing.JTextField txtInvoiceNumber;
-    private javax.swing.JTextField txtTaxAmount;
-    private javax.swing.JTextField txtTotalAmount;
+    private javax.swing.JTextField txtHoaDonID;
+    private javax.swing.JTextField txtSoHoaDon;
+    private javax.swing.JTextField txtThueTien;
+    private javax.swing.JTextField txtTongTien;
     // End of variables declaration//GEN-END:variables
 }
