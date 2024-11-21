@@ -62,7 +62,7 @@ public class HoaDon {
     }
 
     public BigDecimal getTongTien() {
-        return tongTien;
+        return tongTien != null ? tongTien : BigDecimal.ZERO;
     }
 
     public void setTongTien(BigDecimal tongTien) {

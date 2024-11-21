@@ -154,4 +154,18 @@ public class KhachHangController {
         }
         return list;
     }
+
+    public int geKhachHangCount() throws SQLException {
+        String sql = "SELECT COUNT(*) FROM KhachHang";
+        int count = 0;
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql); ResultSet rs = pstmt.executeQuery()) {
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return count;
+    }
 }

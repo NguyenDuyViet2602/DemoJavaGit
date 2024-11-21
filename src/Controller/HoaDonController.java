@@ -177,7 +177,7 @@ public class HoaDonController {
 
     public ResultSet hienThiHoaDonStatus() throws SQLException {
         Connection conn = DatabaseConnection.getConnection();
-        String sql = "SELECT * FROM HoaDon";
+        String sql = "SELECT DISTINCT TrangThai FROM HoaDon WHERE TrangThai IN ('Đã thanh toán', 'chưa thanh toán');";
         PreparedStatement preparedStatement = conn.prepareStatement(sql);
         return preparedStatement.executeQuery();
     }
@@ -231,18 +231,75 @@ public class HoaDonController {
     }
 
     public BigDecimal tinhTongTienHoaDon(int hoaDonId) throws SQLException {
-        String sql = "SELECT SUM(SoLuong * DonGia) AS TongTien FROM ChiTietHoaDon WHERE HoaDonID = ?";
+        String sqlSelect = "SELECT SUM(SoLuong * DonGia) AS TongTien FROM ChiTietHoaDon WHERE HoaDonID = ?";
         BigDecimal tongTien = BigDecimal.ZERO;
 
-        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, hoaDonId);
-            ResultSet rs = pstmt.executeQuery();
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmtSelect = conn.prepareStatement(sqlSelect)) {
+            pstmtSelect.setInt(1, hoaDonId);
+            ResultSet rs = pstmtSelect.executeQuery();
 
             if (rs.next()) {
                 tongTien = rs.getBigDecimal("TongTien");
+                // Kiểm tra nếu tongTien là null
+                if (tongTien == null) {
+                    tongTien = BigDecimal.ZERO;
+                }
+            }
+
+            // Tính tiền thuế là 10% của tổng tiền
+            BigDecimal thueTien = tongTien.multiply(BigDecimal.valueOf(0.1));
+
+            // Cập nhật tổng tiền và tiền thuế vào bảng HoaDon
+            String sqlUpdate = "UPDATE HoaDon SET TongTien = ?, ThueTien = ? WHERE HoaDonID = ?";
+            try (PreparedStatement pstmtUpdate = conn.prepareStatement(sqlUpdate)) {
+                pstmtUpdate.setBigDecimal(1, tongTien);
+                pstmtUpdate.setBigDecimal(2, thueTien);
+                pstmtUpdate.setInt(3, hoaDonId);
+                pstmtUpdate.executeUpdate();
             }
         }
         return tongTien;
     }
 
+    public int getHoaDonCountDaThanhToan() throws SQLException {
+        String sql = "SELECT COUNT(*) FROM HoaDon WHERE TrangThai = 'Đã thanh toán'";
+        int count = 0;
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql); ResultSet rs = pstmt.executeQuery()) {
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return count;
+    }
+
+    public int getHoaDonCountChuaThanhToan() throws SQLException {
+        String sql = "SELECT COUNT(*) FROM HoaDon WHERE TrangThai = 'Chưa thanh toán'";
+        int count = 0;
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql); ResultSet rs = pstmt.executeQuery()) {
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return count;
+    }
+
+    public int getTongTien() throws SQLException {
+        String sql = "SELECT Sum(TongTien) FROM HoaDon WHERE TrangThai = 'Đã thanh toán'";
+        int count = 0;
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql); ResultSet rs = pstmt.executeQuery()) {
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return count;
+    }
 }

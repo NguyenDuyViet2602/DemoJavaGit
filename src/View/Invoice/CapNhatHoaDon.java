@@ -127,28 +127,28 @@ public class CapNhatHoaDon extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel1.setText("Add Invoice");
+        jLabel1.setText("Sửa hóa đơn");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel2.setText("Invoice Number:");
+        jLabel2.setText("Số hóa đơn:");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel3.setText("Customer:");
+        jLabel3.setText("Khách hàng");
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel4.setText("Status:");
+        jLabel4.setText("Trạng thái:");
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel8.setText("Due Date:");
+        jLabel8.setText("Đến hạn:");
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel5.setText("Total Amount:");
+        jLabel5.setText("Tổng tiền:");
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel6.setText("Tax Amount:");
+        jLabel6.setText("Tiền thuế:");
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel7.setText("Invoice Date:");
+        jLabel7.setText("Ngày lập:");
 
         btnSaveInvoice.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnSaveInvoice.setText("Save");
@@ -165,7 +165,7 @@ public class CapNhatHoaDon extends javax.swing.JFrame {
         });
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel9.setText("Invoice ID:");
+        jLabel9.setText("Hóa đơn Id:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

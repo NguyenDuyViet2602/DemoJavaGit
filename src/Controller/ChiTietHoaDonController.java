@@ -239,14 +239,36 @@ public class ChiTietHoaDonController {
         return giaBan;
     }
 
-    public boolean xoaHoaDon(int id) throws SQLException {
-        String sql = "DELETE FROM ChiTietHoaDon WHERE ChiTietHoaDonID=?";
-        try {
-            Connection conn = DatabaseConnection.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(sql);
+    public boolean xoaChiTietHoaDon(int chiTietHoaDonID) throws SQLException {
+        String selectSql = "SELECT SoLuong, SanPhamID FROM ChiTietHoaDon WHERE ChiTietHoaDonID = ?";
+        String deleteSql = "DELETE FROM ChiTietHoaDon WHERE ChiTietHoaDonID = ?";
+        String updateProductSql = "UPDATE SanPham SET SoLuongTon = SoLuongTon + ? WHERE SanPhamID = ?";
 
-            pstmt.setInt(1, id);
-            return pstmt.executeUpdate() > 0;
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement selectStmt = conn.prepareStatement(selectSql); PreparedStatement deleteStmt = conn.prepareStatement(deleteSql); PreparedStatement updateStmt = conn.prepareStatement(updateProductSql)) {
+
+            // Lấy thông tin số lượng và sản phẩm từ chi tiết hóa đơn
+            selectStmt.setInt(1, chiTietHoaDonID);
+            ResultSet rs = selectStmt.executeQuery();
+
+            int soLuong = 0;
+            int sanPhamId = 0;
+            if (rs.next()) {
+                soLuong = rs.getInt("SoLuong");
+                sanPhamId = rs.getInt("SanPhamID");
+            }
+
+            // Xóa chi tiết hóa đơn
+            deleteStmt.setInt(1, chiTietHoaDonID);
+            int rowsDeleted = deleteStmt.executeUpdate();
+
+            if (rowsDeleted > 0) {
+                // Cập nhật lại số lượng tồn kho của sản phẩm
+                updateStmt.setInt(1, soLuong);
+                updateStmt.setInt(2, sanPhamId);
+                updateStmt.executeUpdate();
+            }
+
+            return rowsDeleted > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             throw e;

@@ -103,7 +103,7 @@ public class ThemChiTietHoaDon extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         cbbSoHoaDon = new javax.swing.JComboBox<>();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setText("Thêm chi tiết hóa đơn");
