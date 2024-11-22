@@ -385,6 +385,18 @@ public class frmKhachHang extends javax.swing.JPanel {
             return;
         }
 
+        // Kiểm tra email có kết thúc bằng @gmail.com
+        if (!email.endsWith("@gmail.com")) {
+            JOptionPane.showMessageDialog(null, "Email phải có định dạng @gmail.com", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Kiểm tra số điện thoại chỉ chứa số
+        if (!dienThoai.matches("\\d+")) {
+            JOptionPane.showMessageDialog(null, "Số điện thoại chỉ được phép chứa các chữ số", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
         try {
             // Tạo đối tượng KhachHang
             KhachHang khachHang = new KhachHang();

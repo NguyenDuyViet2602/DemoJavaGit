@@ -5,8 +5,11 @@
 package Controller;
 
 import Model.NguoiDung;
+import Model.SanPham;
 import db.DatabaseConnection;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -136,5 +139,35 @@ public class NguoiDungController {
             JOptionPane.showMessageDialog(null, "Error while deleting user: " + e.getMessage());
             return false; // Trả về false nếu có lỗi
         }
+    }
+    public List<SanPham> timKiemSanPham(String keyword) throws SQLException {
+        String sql = "SELECT SanPhamID, TenSanPham, DonGia, MoTa, SoLuongTon FROM SanPham WHERE TenSanPham LIKE ? OR DonGia LIKE ? OR MoTa LIKE ? OR SoLuongTon LIKE ?";
+        List<SanPham> danhSach = new ArrayList<>();
+
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+
+            // Sử dụng wildcard '%' để tìm kiếm
+            pstmt.setString(1, "%" + keyword + "%");
+            pstmt.setString(2, "%" + keyword + "%");
+            pstmt.setString(3, "%" + keyword + "%");
+            pstmt.setString(4, "%" + keyword + "%");
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                SanPham sanPham = new SanPham();
+                sanPham.setSanPhamId(rs.getInt("SanPhamID"));
+                sanPham.setTenSanPham(rs.getString("TenSanPham"));
+                sanPham.setGiaSanPham(rs.getBigDecimal("DonGia"));
+                sanPham.setMoTaSanPham(rs.getString("MoTa"));
+                sanPham.setSoluongton(rs.getInt("SoLuongTon"));
+                danhSach.add(sanPham);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        }
+        return danhSach;
     }
 }

@@ -101,6 +101,18 @@ public class frmDangNhap extends javax.swing.JFrame {
             String email = txtEmail.getText();
             String password = new String(txtPassword.getPassword()); // Lấy mật khẩu từ JPasswordField
 
+            // Kiểm tra email không được để trống
+            if (email.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập email", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return; // Kết thúc nếu email trống
+            }
+
+            // Kiểm tra mật khẩu không được để trống
+            if (password.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập mật khẩu", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return; // Kết thúc nếu mật khẩu trống
+            }
+
             // Kiểm tra email có đuôi @gmail.com
             if (!email.endsWith("@gmail.com")) {
                 JOptionPane.showMessageDialog(this, "Vui lòng sử dụng email có đuôi @gmail.com", "Lỗi", JOptionPane.ERROR_MESSAGE);

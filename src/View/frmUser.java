@@ -6,7 +6,10 @@ package View;
 
 import Controller.NguoiDungController;
 import Model.NguoiDung;
+import Model.SanPham;
 import java.awt.Color;
+import java.sql.SQLException;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -63,7 +66,7 @@ public class frmUser extends javax.swing.JPanel {
         jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtTimKiem = new javax.swing.JTextField();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -235,6 +238,12 @@ public class frmUser extends javax.swing.JPanel {
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel7.setText("Tìm Kiếm:");
 
+        txtTimKiem.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtTimKiemKeyReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -243,7 +252,7 @@ public class frmUser extends javax.swing.JPanel {
                 .addContainerGap(72, Short.MAX_VALUE)
                 .addComponent(jLabel7)
                 .addGap(18, 18, 18)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -251,7 +260,7 @@ public class frmUser extends javax.swing.JPanel {
                 .addGap(17, 17, 17)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(33, Short.MAX_VALUE))
         );
 
@@ -389,6 +398,47 @@ public class frmUser extends javax.swing.JPanel {
         setKhoa(true);
         setButton(true);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void txtTimKiemKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTimKiemKeyReleased
+//        String keyword = txtTimKiem.getText();
+//        try {
+//            List<NguoiDung> danhSachNguoiDung;
+//
+//            // Kiểm tra nếu ô tìm kiếm trống, lấy tất cả sản phẩm
+//            if (keyword.isEmpty()) {
+//                danhSachNguoiDung = controller.getTatCaSanPham();
+//            } else {
+//                // Gọi phương thức tìm kiếm sản phẩm với từ khóa
+//                danhSachNguoiDung = controller.timKiemSanPham(keyword);
+//            }
+//
+//            // Nếu không tìm thấy sản phẩm, thông báo cho người dùng
+//            if (danhSachSanPham.isEmpty()) {
+//                JOptionPane.showMessageDialog(null, "Không tìm thấy sản phẩm nào khớp với từ khóa!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+//            }
+//
+//            // Xóa dữ liệu cũ trong tableModel
+//            xoaDuLieu();
+//
+//            // Duyệt qua danh sách sản phẩm và thêm vào tableModel
+//            for (SanPham sanPham : danhSachSanPham) {
+//                Object[] row = {
+//                    sanPham.getSanPhamId(),
+//                    sanPham.getTenSanPham(),
+//                    sanPham.getGiaSanPham(),
+//                    sanPham.getMoTaSanPham()
+//                };
+//                tableModel.addRow(row);
+//            }
+//
+//        } catch (SQLException e) {
+//            // Xử lý lỗi khi có vấn đề với kết nối hoặc truy vấn cơ sở dữ liệu
+//            JOptionPane.showMessageDialog(null, "Lỗi khi tìm kiếm sản phẩm: " + e.getMessage(), "Thông báo", JOptionPane.ERROR_MESSAGE);
+//        } catch (Exception e) {
+//            // Xử lý lỗi chung nếu có
+//            JOptionPane.showMessageDialog(null, "Có lỗi xảy ra: " + e.getMessage(), "Thông báo", JOptionPane.ERROR_MESSAGE);
+//        }
+    }//GEN-LAST:event_txtTimKiemKeyReleased
     private void resetForm() {
         txtTen.setText("");
         txtDienThoai.setText("");
@@ -441,12 +491,12 @@ public class frmUser extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTable tblNguoiDung;
     private javax.swing.JTextField txtDiaChi;
     private javax.swing.JTextField txtDienThoai;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtMatKhau;
     private javax.swing.JTextField txtTen;
+    private javax.swing.JTextField txtTimKiem;
     // End of variables declaration//GEN-END:variables
 }
