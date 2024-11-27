@@ -76,3 +76,60 @@ table.addCell(new Cell().add(new Paragraph(sanPhamId)));
         }
     }
 }
+//try {
+//            SimpleDateFormat myFormat = new SimpleDateFormat("dd-MM-yyyy");
+//            Calendar cal = Calendar.getInstance();
+//
+//        } catch (Exception e) {
+//        }
+//        com.itextpdf.text.Document doc = new com.itextpdf.text.Document();
+//        try {
+//            PdfWriter.getInstance(doc, new FileOutputStream(InventoryUtils.billPath + "" + "hoadon" + ".pdf"));
+//            doc.open();
+//            Paragraph projectName = new Paragraph("Hoa don dien tu");
+//            doc.add((Element) projectName);
+//            Paragraph starline = new Paragraph("*******************************");
+//            doc.add((Element) starline);
+//            Paragraph details = new Paragraph("\tOrder ID:" + "1" + "\nDate:" + "11/27/2024" + "\nToltal Paid:" + "10000");
+//            doc.add((Element) details);
+//            doc.add((Element) starline);
+//            PdfPTable tbl = new PdfPTable(5);
+//            PdfPCell nameCell = new PdfPCell(new Phrase("Name"));
+//            PdfPCell mota = new PdfPCell(new Phrase("mo ta"));
+//            PdfPCell giaban = new PdfPCell(new Phrase("Gia ban"));
+//            PdfPCell soluong = new PdfPCell(new Phrase("So luong"));
+//            PdfPCell thanhtien = new PdfPCell(new Phrase("Thanh tien"));
+//
+//            BaseColor backgroundColor = new BaseColor(255, 204, 51);
+//            nameCell.setBackgroundColor(backgroundColor);
+//            mota.setBackgroundColor(backgroundColor);
+//            giaban.setBackgroundColor(backgroundColor);
+//            soluong.setBackgroundColor(backgroundColor);
+//            thanhtien.setBackgroundColor(backgroundColor);
+//
+//            tbl.addCell(nameCell);
+//            tbl.addCell(mota);
+//            tbl.addCell(giaban);
+//            tbl.addCell(soluong);
+//            tbl.addCell(thanhtien);
+//
+//            for (int i = 0; i < tblChiTietHoaDon.getColumnCount(); i++) {
+//                tbl.addCell(tblChiTietHoaDon.getValueAt(i, 1).toString());
+//                tbl.addCell(tblChiTietHoaDon.getValueAt(i, 2).toString());
+//                tbl.addCell(tblChiTietHoaDon.getValueAt(i, 3).toString());
+//                tbl.addCell(tblChiTietHoaDon.getValueAt(i, 4).toString());
+//                tbl.addCell(tblChiTietHoaDon.getValueAt(i, 5).toString());
+//            }
+//            doc.add(tbl);
+//            doc.add((Element) starline);
+//            OpenPdf.OpenById(orderId);
+//            doc.close();
+//            setVisible(false);
+//            try {
+//                new TaoHoaDon1().setVisible(true);
+//            } catch (SQLException ex) {
+//                Logger.getLogger(TaoHoaDon1.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        } catch (Exception e) {
+//            JOptionPane.showMessageDialog(null, e);
+//        }

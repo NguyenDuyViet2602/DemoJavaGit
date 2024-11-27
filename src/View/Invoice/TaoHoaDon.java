@@ -28,13 +28,12 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.util.Date;
-import javax.swing.JTable;
 
 /**
  *
  * @author Manh
  */
-public class CapNhatHoaDon extends javax.swing.JFrame {
+public class TaoHoaDon extends javax.swing.JFrame {
 
     private final HoaDonController iv = new HoaDonController();
     private boolean cothem = true;
@@ -45,23 +44,10 @@ public class CapNhatHoaDon extends javax.swing.JFrame {
     private int currentId = 1;
     private String orderId = "";
     private final EmailSender EmailSender = new EmailSender();
-    private int hoaDonId;
-    private String soHoaDon;
-    private BigDecimal tongTien;
-    private BigDecimal thueTien;
-    private Date ngayLapHoaDon;
-    private Date ngayHanThanhToan;
-    private String trangThai;
-
-    private DefaultTableModel modelChiTietHoaDon;
-
     /**
      * Creates new form TaoHoaDon1
      */
-    public CapNhatHoaDon(frmHoaDon parent, int hoaDonId, String soHoaDon,
-            String tenKhachHang, BigDecimal tongTien,
-            BigDecimal thueTien, Date ngayLapHoaDon,
-            Date ngayHanThanhToan, String trangThai) throws SQLException {
+    public TaoHoaDon() throws SQLException {
         initComponents();
         String[] colsSanPham = {"Id", "Tên sản phẩm", "Giá", "Mô tả", "Số lượng"}; // Đặt tên các cột cho bảng
         tableModel.setColumnIdentifiers(colsSanPham); // Cập nhật tiêu đề cột cho tableModel
@@ -79,38 +65,6 @@ public class CapNhatHoaDon extends javax.swing.JFrame {
             // Tạo PDF
             createPDF();
         });
-        this.hoaDonId = hoaDonId;
-        this.soHoaDon = soHoaDon;
-        this.tongTien = tongTien;
-        this.thueTien = thueTien;
-        this.ngayLapHoaDon = ngayLapHoaDon;
-        this.ngayHanThanhToan = ngayHanThanhToan;
-        this.trangThai = trangThai;
-
-        // Hiển thị thông tin lên các trường tương ứng
-        txtSoHoaDon.setText(soHoaDon);
-        txtTongTien.setText(tongTien.toString());
-        Date.setDate(ngayLapHoaDon);
-        Date1.setDate(ngayHanThanhToan);
-
-        // Thiết lập giá trị cho JComboBox
-        cbbKhachHang.setSelectedItem(tenKhachHang); // Chọn khách hàng đã được lưu
-        // Khởi tạo mô hình cho JTable
-        modelChiTietHoaDon = new DefaultTableModel();
-        modelChiTietHoaDon.addColumn("Mã SP");
-        modelChiTietHoaDon.addColumn("Tên SP");
-        modelChiTietHoaDon.addColumn("Số lượng");
-        modelChiTietHoaDon.addColumn("Đơn giá");
-        modelChiTietHoaDon.addColumn("Thành tiền");
-
-        tblChiTietHoaDon.setModel(modelChiTietHoaDon); // Gán mô hình cho JTable
-
-        // Tải dữ liệu chi tiết hóa đơn
-        loadChiTietHoaDon(hoaDonId);
-    }
-
-    private CapNhatHoaDon() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     public void hienThiDuLieuSanPham() {
@@ -168,26 +122,6 @@ public class CapNhatHoaDon extends javax.swing.JFrame {
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Lỗi khi lấy giá bán sản phẩm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    private void loadChiTietHoaDon(int hoaDonId) throws SQLException {
-        // Giả sử bạn có một phương thức trong HoaDonController để lấy chi tiết hóa đơn
-        List<ChiTietHoaDon> chiTietHoaDonList = ivdt.getChiTietHoaDonById(hoaDonId);
-
-        // Xóa dữ liệu cũ trong bảng
-        modelChiTietHoaDon.setRowCount(0);
-
-        // Thêm dữ liệu mới vào bảng
-        for (ChiTietHoaDon ct : chiTietHoaDonList) {
-            Object[] row = new Object[]{
-                ct.getHoaDon().getHoaDonId(),
-                ct.getSanPham().getTenSanPham(),
-                ct.getSoLuong(),
-                ct.getDonGia(),
-                ct.getThanhTien()
-            };
-            modelChiTietHoaDon.addRow(row);
         }
     }
 
@@ -664,35 +598,73 @@ public class CapNhatHoaDon extends javax.swing.JFrame {
     }
     private void btnLuuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLuuActionPerformed
         try {
-            // Lấy thông tin từ các trường
-            String soHoaDon = txtSoHoaDon.getText();
-            String tenKhachHang = (String) cbbKhachHang.getSelectedItem(); // Lấy tên khách hàng từ JComboBox
-            BigDecimal tongTien = new BigDecimal(txtTongTien.getText());
-            Date ngayLapHoaDon = Date.getDate();
-            Date ngayHanThanhToan = Date1.getDate();
-
-            // Tạo đối tượng HoaDon
             HoaDon hoaDon = new HoaDon();
-            hoaDon.setHoaDonId(hoaDonId);
-            hoaDon.setSoHoaDon(soHoaDon);
-            hoaDon.setTongTien(tongTien);
-            hoaDon.setThueTien(thueTien);
-            hoaDon.setNgayLapHoaDon(ngayLapHoaDon);
-            hoaDon.setNgayHanThanhToan(ngayHanThanhToan);
+            hoaDon.setSoHoaDon(txtSoHoaDon.getText());
+            hoaDon.setKhachHang(new KhachHang());
+            hoaDon.getKhachHang().setKhachHangId(iv.getKhachHangIdByName((String) cbbKhachHang.getSelectedItem()));
+            hoaDon.setTongTien(new BigDecimal(txtTongTien.getText()));
+
+            // Kiểm tra và gán giá trị cho ngày lập hóa đơn
+            Date ngayLapHoaDon = Date.getDate(); // Giả sử bạn đang sử dụng JDateChooser
+            if (ngayLapHoaDon != null) {
+                hoaDon.setNgayLapHoaDon(ngayLapHoaDon);
+            } else {
+                JOptionPane.showMessageDialog(this, "Ngày lập hóa đơn không được để trống.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Kiểm tra và gán giá trị cho ngày hạn thanh toán
+            Date ngayHanThanhToan = Date1.getDate(); // Giả sử bạn đang sử dụng JDateChooser
+            if (ngayHanThanhToan != null) {
+                hoaDon.setNgayHanThanhToan(ngayHanThanhToan);
+            } else {
+                JOptionPane.showMessageDialog(this, "Ngày hạn thanh toán không được để trống.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Gán trạng thái mặc định
+            String trangThai = "Chưa thanh toán"; // Trạng thái mặc định
             hoaDon.setTrangThai(trangThai);
 
-            // Gọi phương thức cập nhật hóa đơn trong HoaDonController
-            HoaDonController hoaDonController = new HoaDonController();
-            boolean isUpdated = hoaDonController.suaHoaDon(hoaDon);
+            // Lưu Hóa Đơn vào cơ sở dữ liệu
+            if (iv.themHoaDon(hoaDon)) {
+                // Lấy HoaDonID vừa lưu
+                int hoaDonId = iv.getHoaDonIdBySoHoaDon(hoaDon.getSoHoaDon()); // Cần viết phương thức này trong HoaDonController
 
-            if (isUpdated) {
-                JOptionPane.showMessageDialog(this, "Cập nhật hóa đơn thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
-                this.dispose(); // Đóng form sau khi lưu thành công
-            } else {
-                JOptionPane.showMessageDialog(this, "Cập nhật hóa đơn thất bại!", "Thông báo", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Có lỗi xảy ra khi lưu hóa đơn: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+                // Kiểm tra nếu hoaDonId hợp lệ
+                if (hoaDonId == -1) {
+                    JOptionPane.showMessageDialog(this, "Không tìm thấy hóa đơn vừa lưu.", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Lưu chi tiết hóa đơn
+                for (int i = 0; i < tableModel1.getRowCount(); i++) {
+                    ChiTietHoaDon chiTiet = new ChiTietHoaDon();
+                    chiTiet.setHoaDon(hoaDon); // Gán hóa đơn cho chi tiết
+                    chiTiet.getHoaDon().setHoaDonId(hoaDonId); // Gán ID hóa đơn vừa lưu
+                    chiTiet.setSanPham(new SanPham());
+                    chiTiet.getSanPham().setSanPhamId(sanPhamController.getSanPhamIdByTen((String) tableModel1.getValueAt(i, 1)));
+                    chiTiet.setSoLuong((Integer) tableModel1.getValueAt(i, 2));
+                    chiTiet.setDonGia((BigDecimal) tableModel1.getValueAt(i, 3));
+
+                    // Gọi phương thức để thêm chi tiết hóa đơn
+                    ivdt.themChiTietHoaDon(chiTiet);
+                }
+                JOptionPane.showMessageDialog(this, "Lưu hóa đơn thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                // Tạo PDF
+            createPDF();
+
+            // Gửi email với hóa đơn đính kèm
+            String recipientEmail = "customer@example.com"; // Địa chỉ email người nhận
+            String subject = "Hóa Đơn #" + hoaDon.getSoHoaDon();
+            String body = "Xin chào " + cbbKhachHang.getSelectedItem() + ",\n\nHóa đơn của bạn đã được tạo và đính kèm trong email này.\n\nTrân trọng!";
+            String attachmentPath = "HoaDon.pdf"; // Đường dẫn đến tệp PDF
+
+            EmailSender.sendEmail(recipientEmail, subject, body, attachmentPath);
+            } 
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi khi lưu hóa đơn: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnLuuActionPerformed
 
@@ -769,27 +741,25 @@ public class CapNhatHoaDon extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CapNhatHoaDon.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TaoHoaDon.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CapNhatHoaDon.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TaoHoaDon.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CapNhatHoaDon.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TaoHoaDon.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CapNhatHoaDon.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TaoHoaDon.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CapNhatHoaDon().setVisible(true);
+                try {
+                    new TaoHoaDon().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(TaoHoaDon.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }

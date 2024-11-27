@@ -7,13 +7,16 @@ package View.Invoice;
 import Controller.HoaDonController;
 import Model.HoaDon;
 import Model.SanPham;
-import View.Invoice.ThemHoaDon;
+import View.Invoice.TaoHoaDon;
+import View.Invoice.CapNhatHoaDon;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import java.sql.ResultSet;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -175,13 +178,14 @@ public class frmHoaDon extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap(103, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(txtTimKiemHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnAddInvoice)
                         .addComponent(btnUpdateInvoice)
-                        .addComponent(btnDeleteInvoice)))
+                        .addComponent(btnDeleteInvoice))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(txtTimKiemHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(14, 14, 14))
         );
 
@@ -205,8 +209,12 @@ public class frmHoaDon extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddInvoiceActionPerformed
-        ThemHoaDon addinvoice = new ThemHoaDon(this); // Truyền tham chiếu của frmInvoice
-        addinvoice.setVisible(true);
+        try {
+            TaoHoaDon addinvoice = new TaoHoaDon(); // Truyền tham chiếu của frmInvoice
+            addinvoice.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(frmHoaDon.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnAddInvoiceActionPerformed
 
     private void btnDeleteInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteInvoiceActionPerformed
@@ -235,7 +243,7 @@ public class frmHoaDon extends javax.swing.JPanel {
     }//GEN-LAST:event_btnDeleteInvoiceActionPerformed
 
     private void btnUpdateInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateInvoiceActionPerformed
-        int selectedRow = tblHoaDon.getSelectedRow(); // Kiểm tra xem đã chọn một hàng trong bảng chưa
+        int selectedRow = tblHoaDon.getSelectedRow(); // Lấy chỉ số dòng đã chọn
 
         if (selectedRow >= 0) {
             try {
@@ -269,7 +277,6 @@ public class frmHoaDon extends javax.swing.JPanel {
             // Thông báo khi không có hàng nào được chọn
             JOptionPane.showMessageDialog(this, "Vui lòng chọn một hóa đơn để cập nhật", "Thông báo", JOptionPane.WARNING_MESSAGE);
         }
-
     }//GEN-LAST:event_btnUpdateInvoiceActionPerformed
 // Hàm trợ giúp chuyển đổi kiểu Integer
 

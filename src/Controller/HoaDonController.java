@@ -87,12 +87,15 @@ public class HoaDonController {
     }
 
     public boolean themHoaDon(HoaDon hoaDon) throws SQLException {
+        // Kiểm tra xem số hóa đơn đã tồn tại chưa
+        if (isSoHoaDonExists(hoaDon.getSoHoaDon())) {
+            System.out.println("Số hóa đơn đã tồn tại: " + hoaDon.getSoHoaDon());
+            return false; // Trả về false nếu số hóa đơn đã tồn tại
+        }
+
         String sql = "INSERT INTO HoaDon (SoHoaDon, KhachHangID, TongTien, ThueTien, NgayLapHoaDon, NgayHanThanhToan, TrangThai) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        try {
-            Connection conn = DatabaseConnection.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, hoaDon.getSoHoaDon());
             pstmt.setInt(2, hoaDon.getKhachHang().getKhachHangId());
             pstmt.setBigDecimal(3, hoaDon.getTongTien());
@@ -105,11 +108,23 @@ public class HoaDonController {
             pstmt.setDate(6, new Date(hoaDon.getNgayHanThanhToan().getTime()));  // NgayHanThanhToan
             pstmt.setString(7, hoaDon.getTrangThai());
 
-            return pstmt.executeUpdate() > 0;
+            return pstmt.executeUpdate() > 0; // Trả về true nếu chèn thành công
         } catch (SQLException e) {
             e.printStackTrace();
-            throw e;
+            throw e; // Ném lại ngoại lệ để xử lý ở nơi khác
         }
+    }
+
+    public boolean isSoHoaDonExists(String soHoaDon) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM HoaDon WHERE SoHoaDon = ?";
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, soHoaDon);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // Nếu có ít nhất một bản ghi, trả về true
+            }
+        }
+        return false; // Nếu không có bản ghi nào, trả về false
     }
 
     public boolean suaHoaDon(HoaDon hoaDon) throws SQLException {
@@ -301,5 +316,24 @@ public class HoaDonController {
             throw e;
         }
         return count;
+    }
+
+    public int getHoaDonIdBySoHoaDon(String soHoaDon) throws SQLException {
+        String sql = "SELECT HoaDonID FROM HoaDon WHERE SoHoaDon = ?";
+        int hoaDonId = -1; // Giá trị mặc định nếu không tìm thấy
+
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, soHoaDon);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                hoaDonId = rs.getInt("HoaDonID"); // Lấy HoaDonID từ kết quả truy vấn
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e; // Ném lại lỗi để xử lý ở nơi khác nếu cần
+        }
+
+        return hoaDonId; // Trả về HoaDonID hoặc -1 nếu không tìm thấy
     }
 }

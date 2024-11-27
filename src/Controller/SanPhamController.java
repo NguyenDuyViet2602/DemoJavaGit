@@ -34,7 +34,7 @@ public class SanPhamController {
                 sanPham.setGiaSanPham(rs.getBigDecimal("DonGia"));
                 sanPham.setMoTaSanPham(rs.getString("MoTa"));
                 sanPham.setSoluongton(rs.getInt("SoLuongTon"));
-                
+
                 danhSach.add(sanPham);
             }
         } catch (SQLException e) {
@@ -152,4 +152,28 @@ public class SanPhamController {
         }
         return danhSach;
     }
+
+    public void capNhatSoLuongSanPham(int sanPhamId, int soLuongMoi) throws SQLException {
+        String sql = "UPDATE SanPham SET SoLuongTon = ? WHERE SanPhamID = ?";
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, soLuongMoi);
+            pstmt.setInt(2, sanPhamId);
+            pstmt.executeUpdate();
+        }
+    }
+
+    public int getSanPhamIdByTen(String tenSanPham) throws SQLException {
+        String sql = "SELECT SanPhamID FROM SanPham WHERE TenSanPham = ?";
+        int sanPhamId = -1;
+
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, tenSanPham);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                sanPhamId = rs.getInt("SanPhamID");
+            }
+        }
+        return sanPhamId;
+    }
+
 }

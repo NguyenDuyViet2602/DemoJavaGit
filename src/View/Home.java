@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import View.Invoice.frmHoaDon;
-import View.InvoiceDetail.frmChiTietHoaDon;
+//import View.InvoiceDetail.frmChiTietHoaDon;
 
 /**
  *
@@ -208,12 +208,12 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_btnInvoiceActionPerformed
 
     private void btnInvoiceDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInvoiceDetailActionPerformed
-        try {
-            frmChiTietHoaDon ivdt = new frmChiTietHoaDon();
-            jpload.jPanelLoader(panel_load, ivdt);
-        } catch (SQLException ex) {
-            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//            frmChiTietHoaDon ivdt = new frmChiTietHoaDon();
+//            jpload.jPanelLoader(panel_load, ivdt);
+//        } catch (SQLException ex) {
+//            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }//GEN-LAST:event_btnInvoiceDetailActionPerformed
 
     private void btnUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsersActionPerformed

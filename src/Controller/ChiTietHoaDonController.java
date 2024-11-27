@@ -97,38 +97,15 @@ public class ChiTietHoaDonController {
     }
 
     public boolean themChiTietHoaDon(ChiTietHoaDon chiTietHoaDon) throws SQLException {
-        String checkQtySql = "SELECT SoLuongTon FROM SanPham WHERE SanPhamID = ?";
-        String insertSql = "INSERT INTO ChiTietHoaDon (HoaDonID, SanPhamID, SoLuong, DonGia) VALUES (?, ?, ?, ?)";
-        String updateProductSql = "UPDATE SanPham SET SoLuongTon = SoLuongTon - ? WHERE SanPhamID = ?";
+        String sql = "INSERT INTO ChiTietHoaDon (HoaDonID, SanPhamID, SoLuong, DonGia) VALUES (?, ?, ?, ?)";
 
-        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement checkStmt = conn.prepareStatement(checkQtySql); PreparedStatement insertStmt = conn.prepareStatement(insertSql); PreparedStatement updateStmt = conn.prepareStatement(updateProductSql)) {
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, chiTietHoaDon.getHoaDon().getHoaDonId());
+            pstmt.setInt(2, chiTietHoaDon.getSanPham().getSanPhamId());
+            pstmt.setInt(3, chiTietHoaDon.getSoLuong());
+            pstmt.setBigDecimal(4, chiTietHoaDon.getDonGia());
 
-            // Kiểm tra số lượng tồn kho hiện tại
-            checkStmt.setInt(1, chiTietHoaDon.getSanPham().getSanPhamId());
-            ResultSet rs = checkStmt.executeQuery();
-
-            if (rs.next()) {
-                int currentQty = rs.getInt("SoLuongTon");
-                if (currentQty < chiTietHoaDon.getSoLuong()) {
-                    // Số lượng tồn kho không đủ
-                    throw new SQLException("Số lượng sản phẩm không đủ.");
-                }
-            }
-
-            // Thêm chi tiết hóa đơn
-            insertStmt.setInt(1, chiTietHoaDon.getHoaDon().getHoaDonId());
-            insertStmt.setInt(2, chiTietHoaDon.getSanPham().getSanPhamId());
-            insertStmt.setInt(3, chiTietHoaDon.getSoLuong());
-            insertStmt.setBigDecimal(4, chiTietHoaDon.getDonGia());
-
-            int rowsInserted = insertStmt.executeUpdate();
-            if (rowsInserted > 0) {
-                // Cập nhật số lượng sản phẩm trong kho
-                updateStmt.setInt(1, chiTietHoaDon.getSoLuong());
-                updateStmt.setInt(2, chiTietHoaDon.getSanPham().getSanPhamId());
-                updateStmt.executeUpdate();
-            }
-
+            int rowsInserted = pstmt.executeUpdate();
             return rowsInserted > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -224,19 +201,22 @@ public class ChiTietHoaDonController {
         return sanPhamId;
     }
 
-    public BigDecimal getGiaBanByTenSanPham(String tenSanPham) {
-        BigDecimal giaBan = BigDecimal.ZERO;
-        String sql = "SELECT DonGia FROM SanPham WHERE TenSanPham = ?";
+    public String getDiaChiByTenKhachHang(String tenKhachHang) {
+        String diaChi = ""; // Giá trị mặc định nếu không tìm thấy
+        String sql = "SELECT DiaChi FROM KhachHang WHERE TenKhachHang = ?";
         try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, tenSanPham);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                giaBan = rs.getBigDecimal("DonGia");
+
+            pstmt.setString(1, tenKhachHang); // Gán tham số tên khách hàng
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    diaChi = rs.getString("DiaChi"); // Lấy giá trị cột DiaChi
+                }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            e.printStackTrace(); // In lỗi nếu xảy ra ngoại lệ
         }
-        return giaBan;
+        return diaChi; // Trả về địa chỉ
     }
 
     public boolean xoaChiTietHoaDon(int chiTietHoaDonID) throws SQLException {
@@ -273,56 +253,5 @@ public class ChiTietHoaDonController {
             e.printStackTrace();
             throw e;
         }
-    }
-
-    public List<ChiTietHoaDon> timKiemChiTietHoaDon(String keyword) throws SQLException {
-        String sql = "SELECT H.ChiTietHoaDonID, HD.SoHoaDon, SP.TenSanPham, H.SoLuong, H.DonGia, H.ThanhTien "
-                + "FROM ChiTietHoaDon H "
-                + "JOIN SanPham SP ON H.SanPhamID = SP.SanPhamID "
-                + "JOIN HoaDon HD ON H.HoaDonID = HD.HoaDonID "
-                + "WHERE HD.SoHoaDon LIKE ? OR SP.TenSanPham LIKE ? OR "
-                + "CAST(H.SoLuong AS VARCHAR) LIKE ? OR "
-                + "CAST(H.DonGia AS VARCHAR) LIKE ? OR "
-                + "CAST(H.ThanhTien AS VARCHAR) LIKE ?";
-        List<ChiTietHoaDon> danhSach = new ArrayList<>();
-
-        try {
-            Connection conn = DatabaseConnection.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-
-            pstmt.setString(1, "%" + keyword + "%");
-            pstmt.setString(2, "%" + keyword + "%");
-            pstmt.setString(3, "%" + keyword + "%");
-            pstmt.setString(4, "%" + keyword + "%");
-            pstmt.setString(5, "%" + keyword + "%");
-
-            ResultSet rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-                ChiTietHoaDon chiTietHoaDon = new ChiTietHoaDon();
-                chiTietHoaDon.setChiTietHoaDonID(rs.getInt("ChiTietHoaDonID"));
-
-                HoaDon hoaDon = new HoaDon();
-                hoaDon.setSoHoaDon(rs.getString("SoHoaDon"));
-                chiTietHoaDon.setHoaDon(hoaDon);
-
-                SanPham sanPham = new SanPham();
-                sanPham.setTenSanPham(rs.getString("TenSanPham"));
-                chiTietHoaDon.setSanPham(sanPham);
-
-                chiTietHoaDon.setSoLuong(rs.getInt("SoLuong"));
-                chiTietHoaDon.setDonGia(rs.getBigDecimal("DonGia"));
-                BigDecimal soLuong = BigDecimal.valueOf(chiTietHoaDon.getSoLuong());
-                BigDecimal donGia = chiTietHoaDon.getDonGia();
-                BigDecimal thanhTien = soLuong.multiply(donGia);
-                chiTietHoaDon.setThanhTien(thanhTien);
-
-                danhSach.add(chiTietHoaDon);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw e;
-        }
-        return danhSach;
     }
 }
