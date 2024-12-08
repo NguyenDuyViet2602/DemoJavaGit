@@ -295,6 +295,7 @@ public class CapNhatHoaDon extends javax.swing.JFrame {
             }
         });
 
+        btnThemSanPham.setBackground(new java.awt.Color(0, 255, 51));
         btnThemSanPham.setText("Thêm sản phẩm");
         btnThemSanPham.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -302,6 +303,7 @@ public class CapNhatHoaDon extends javax.swing.JFrame {
             }
         });
 
+        btnXoaSanPham.setBackground(new java.awt.Color(255, 0, 0));
         btnXoaSanPham.setText("Xóa sản phẩm");
         btnXoaSanPham.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -309,6 +311,7 @@ public class CapNhatHoaDon extends javax.swing.JFrame {
             }
         });
 
+        btnSuaSanPham.setBackground(new java.awt.Color(255, 255, 102));
         btnSuaSanPham.setText("Sửa sản phẩm");
 
         jLabel10.setText("Đến hạn:");
@@ -422,6 +425,7 @@ public class CapNhatHoaDon extends javax.swing.JFrame {
 
         jLabel8.setText("Tổng tiên:");
 
+        btnLuu.setBackground(new java.awt.Color(102, 255, 255));
         btnLuu.setText("Lưu");
         btnLuu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

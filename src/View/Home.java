@@ -4,6 +4,7 @@
  */
 package View;
 
+import View.Invoice.LuuTruHoaDon;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -88,7 +89,7 @@ public class Home extends javax.swing.JFrame {
         buttonGroup1.add(btnInvoiceDetail);
         btnInvoiceDetail.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnInvoiceDetail.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/8666675_clipboard_icon.png"))); // NOI18N
-        btnInvoiceDetail.setText("Chi tiết hóa đơn");
+        btnInvoiceDetail.setText("In hóa đon");
         btnInvoiceDetail.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnInvoiceDetailActionPerformed(evt);
@@ -110,7 +111,7 @@ public class Home extends javax.swing.JFrame {
 
         buttonGroup1.add(btnReport);
         btnReport.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        btnReport.setText("Báo cáo");
+        btnReport.setText("Gửi Mail");
         jPanel1.add(btnReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 340, 132, -1));
 
         buttonGroup1.add(btnInvoice);
@@ -208,12 +209,12 @@ public class Home extends javax.swing.JFrame {
     }//GEN-LAST:event_btnInvoiceActionPerformed
 
     private void btnInvoiceDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInvoiceDetailActionPerformed
-//        try {
-//            frmChiTietHoaDon ivdt = new frmChiTietHoaDon();
-//            jpload.jPanelLoader(panel_load, ivdt);
-//        } catch (SQLException ex) {
-//            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        try {
+            LuuTruHoaDon lthd = new LuuTruHoaDon();
+            jpload.jPanelLoader(panel_load, lthd);
+        } catch (SQLException ex) {
+            Logger.getLogger(Home.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnInvoiceDetailActionPerformed
 
     private void btnUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUsersActionPerformed

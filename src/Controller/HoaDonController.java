@@ -336,4 +336,14 @@ public class HoaDonController {
 
         return hoaDonId; // Trả về HoaDonID hoặc -1 nếu không tìm thấy
     }
+    public void savePDFInfo(int hoaDonId, String filePath) throws SQLException {
+    String sql = "INSERT INTO HoaDonPDF (HoaDonID, DuongDanPDF) VALUES (?, ?)";
+    try (Connection conn = DatabaseConnection.getConnection();PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        pstmt.setInt(1, hoaDonId);
+        pstmt.setString(2, filePath);
+        pstmt.executeUpdate();
+    } catch (SQLException e) {
+        throw new SQLException("Lỗi khi lưu thông tin PDF: " + e.getMessage());
+    }
+}
 }

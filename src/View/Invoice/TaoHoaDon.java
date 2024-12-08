@@ -44,6 +44,7 @@ public class TaoHoaDon extends javax.swing.JFrame {
     private int currentId = 1;
     private String orderId = "";
     private final EmailSender EmailSender = new EmailSender();
+
     /**
      * Creates new form TaoHoaDon1
      */
@@ -229,6 +230,7 @@ public class TaoHoaDon extends javax.swing.JFrame {
             }
         });
 
+        btnThemSanPham.setBackground(new java.awt.Color(0, 255, 0));
         btnThemSanPham.setText("Thêm sản phẩm");
         btnThemSanPham.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -236,6 +238,7 @@ public class TaoHoaDon extends javax.swing.JFrame {
             }
         });
 
+        btnXoaSanPham.setBackground(new java.awt.Color(255, 0, 0));
         btnXoaSanPham.setText("Xóa sản phẩm");
         btnXoaSanPham.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -243,6 +246,7 @@ public class TaoHoaDon extends javax.swing.JFrame {
             }
         });
 
+        btnSuaSanPham.setBackground(new java.awt.Color(255, 255, 102));
         btnSuaSanPham.setText("Sửa sản phẩm");
 
         jLabel10.setText("Đến hạn:");
@@ -356,6 +360,7 @@ public class TaoHoaDon extends javax.swing.JFrame {
 
         jLabel8.setText("Tổng tiên:");
 
+        btnLuu.setBackground(new java.awt.Color(102, 255, 255));
         btnLuu.setText("Lưu");
         btnLuu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -652,16 +657,16 @@ public class TaoHoaDon extends javax.swing.JFrame {
                 }
                 JOptionPane.showMessageDialog(this, "Lưu hóa đơn thành công!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
                 // Tạo PDF
-            createPDF();
+                createPDF();
 
-            // Gửi email với hóa đơn đính kèm
-            String recipientEmail = "customer@example.com"; // Địa chỉ email người nhận
-            String subject = "Hóa Đơn #" + hoaDon.getSoHoaDon();
-            String body = "Xin chào " + cbbKhachHang.getSelectedItem() + ",\n\nHóa đơn của bạn đã được tạo và đính kèm trong email này.\n\nTrân trọng!";
-            String attachmentPath = "HoaDon.pdf"; // Đường dẫn đến tệp PDF
+                // Gửi email với hóa đơn đính kèm
+                String recipientEmail = "customer@example.com"; // Địa chỉ email người nhận
+                String subject = "Hóa Đơn #" + hoaDon.getSoHoaDon();
+                String body = "Xin chào " + cbbKhachHang.getSelectedItem() + ",\n\nHóa đơn của bạn đã được tạo và đính kèm trong email này.\n\nTrân trọng!";
+                String attachmentPath = "HoaDon.pdf"; // Đường dẫn đến tệp PDF
 
-            EmailSender.sendEmail(recipientEmail, subject, body, attachmentPath);
-            } 
+//            EmailSender.sendEmail(recipientEmail, subject, body, attachmentPath);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi khi lưu hóa đơn: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -684,7 +689,8 @@ public class TaoHoaDon extends javax.swing.JFrame {
     private void createPDF() {
         Document document = new Document();
         try {
-            PdfWriter.getInstance(document, new FileOutputStream("HoaDon.pdf"));
+            String filePath = "C:/Users/Manh/Documents/NetBeansProjects/BaiTapLon/src/HoaDon.pdf"; // Đường dẫn lưu file PDF
+            PdfWriter.getInstance(document, new FileOutputStream(filePath));
             document.open();
 
             // Thêm tiêu đề
@@ -716,6 +722,8 @@ public class TaoHoaDon extends javax.swing.JFrame {
 
             // Thêm tổng tiền
             document.add(new Paragraph("Tổng tiền: " + txtTongTien.getText()));
+
+            JOptionPane.showMessageDialog(this, "Hóa đơn đã được lưu thành công tại: " + filePath, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Lỗi khi tạo PDF: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);

@@ -93,11 +93,11 @@ public class frmHoaDon extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblHoaDon = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        txtTimKiemHoaDon = new javax.swing.JTextField();
+        txtTimKiem = new javax.swing.JTextField();
         btnAddInvoice = new javax.swing.JButton();
         btnUpdateInvoice = new javax.swing.JButton();
         btnDeleteInvoice = new javax.swing.JButton();
+        btnTimKiem = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -122,15 +122,13 @@ public class frmHoaDon extends javax.swing.JPanel {
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel1.setText("Tìm Kiếm:");
-
-        txtTimKiemHoaDon.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtTimKiem.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtTimKiemHoaDonKeyReleased(evt);
+                txtTimKiemKeyReleased(evt);
             }
         });
 
+        btnAddInvoice.setBackground(new java.awt.Color(0, 255, 51));
         btnAddInvoice.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnAddInvoice.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/8666718_plus_circle_icon.png"))); // NOI18N
         btnAddInvoice.setText("Thêm");
@@ -140,6 +138,7 @@ public class frmHoaDon extends javax.swing.JPanel {
             }
         });
 
+        btnUpdateInvoice.setBackground(new java.awt.Color(255, 255, 102));
         btnUpdateInvoice.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnUpdateInvoice.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/8666806_edit_write_pen_icon (1).png"))); // NOI18N
         btnUpdateInvoice.setText("Sửa");
@@ -149,6 +148,7 @@ public class frmHoaDon extends javax.swing.JPanel {
             }
         });
 
+        btnDeleteInvoice.setBackground(new java.awt.Color(255, 0, 0));
         btnDeleteInvoice.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         btnDeleteInvoice.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/8666597_trash_2_icon.png"))); // NOI18N
         btnDeleteInvoice.setText("Xóa");
@@ -158,15 +158,24 @@ public class frmHoaDon extends javax.swing.JPanel {
             }
         });
 
+        btnTimKiem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icon/8666693_search_icon.png"))); // NOI18N
+        btnTimKiem.setPreferredSize(new java.awt.Dimension(24, 24));
+        btnTimKiem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTimKiemActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel1)
+                .addContainerGap()
+                .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtTimKiemHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 126, Short.MAX_VALUE)
+                .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 163, Short.MAX_VALUE)
                 .addComponent(btnAddInvoice)
                 .addGap(18, 18, 18)
                 .addComponent(btnUpdateInvoice)
@@ -178,14 +187,12 @@ public class frmHoaDon extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap(103, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnAddInvoice)
-                        .addComponent(btnUpdateInvoice)
-                        .addComponent(btnDeleteInvoice))
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel1)
-                        .addComponent(txtTimKiemHoaDon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAddInvoice)
+                    .addComponent(btnUpdateInvoice)
+                    .addComponent(btnDeleteInvoice)
+                    .addComponent(txtTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnTimKiem, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(14, 14, 14))
         );
 
@@ -314,24 +321,34 @@ public class frmHoaDon extends javax.swing.JPanel {
         }
         return null;
     }
-    private void txtTimKiemHoaDonKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTimKiemHoaDonKeyReleased
-        String keyword = txtTimKiemHoaDon.getText(); // Lấy từ khóa tìm kiếm từ ô nhập liệu
-        try {
-            List<HoaDon> danhSach;
+    private void txtTimKiemKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTimKiemKeyReleased
+        String searchText = txtTimKiem.getText().trim();
 
-            if (keyword.isEmpty()) {
-                // Nếu ô tìm kiếm trống, hiển thị tất cả hóa đơn
-                danhSach = iv.getTatCaHoaDon();
-            } else {
-                // Gọi phương thức tìm kiếm để tìm các hóa đơn theo từ khóa
-                danhSach = iv.timKiemHoaDon(keyword);
+        if (searchText.isEmpty()) {
+            try { 
+                hienThiDuLieu();
+            } catch (SQLException ex) {
+                Logger.getLogger(frmHoaDon.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
+    }//GEN-LAST:event_txtTimKiemKeyReleased
+
+    private void btnTimKiemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTimKiemActionPerformed
+        String tenHoaDon = txtTimKiem.getText().trim(); // Lấy giá trị tìm kiếm từ JTextField
+
+        if (tenHoaDon.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Vui lòng nhập tên sản phẩm để tìm kiếm", "Thông báo", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        try {
+            List<HoaDon> danhSachHoaDon = iv.timKiemHoaDon(tenHoaDon); // Gọi phương thức tìm kiếm
 
             // Xóa dữ liệu cũ trong tableModel trước khi thêm dữ liệu mới
             xoaDuLieu();
 
-            // Thêm các dòng dữ liệu vào tableModel
-            for (HoaDon item : danhSach) {
+            // Duyệt qua từng sản phẩm và thêm vào tableModel
+            for (HoaDon item : danhSachHoaDon) {
                 Object[] rows = {
                     item.getHoaDonId(),
                     item.getSoHoaDon(),
@@ -344,13 +361,16 @@ public class frmHoaDon extends javax.swing.JPanel {
                 };
                 tableModel.addRow(rows); // Thêm dòng dữ liệu mới vào tableModel
             }
-        } catch (SQLException e) {
-            // Xử lý lỗi khi có lỗi trong quá trình truy vấn cơ sở dữ liệu
-            JOptionPane.showMessageDialog(this, "Lỗi khi truy vấn dữ liệu: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace(); // In chi tiết lỗi ra console để dễ debug
-        }
 
-    }//GEN-LAST:event_txtTimKiemHoaDonKeyReleased
+            if (danhSachHoaDon.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Không tìm thấy sản phẩm nào", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Lỗi khi tìm kiếm sản phẩm: " + e.getMessage(), "Thông báo", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Có lỗi xảy ra: " + e.getMessage(), "Thông báo", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnTimKiemActionPerformed
 
     public void xoaDuLieu() throws SQLException {
 //Lay chi so dong cuoi cung
@@ -366,12 +386,12 @@ public class frmHoaDon extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddInvoice;
     private javax.swing.JButton btnDeleteInvoice;
+    private javax.swing.JButton btnTimKiem;
     private javax.swing.JButton btnUpdateInvoice;
     private com.toedter.calendar.JDateChooser jDateChooser1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblHoaDon;
-    private javax.swing.JTextField txtTimKiemHoaDon;
+    private javax.swing.JTextField txtTimKiem;
     // End of variables declaration//GEN-END:variables
 }
